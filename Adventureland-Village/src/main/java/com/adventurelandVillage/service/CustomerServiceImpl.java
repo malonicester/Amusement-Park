@@ -69,7 +69,7 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public Customer validateCustomer(String username, String password) throws CustomerException {
 
-		Customer cst=customerRepository.validateCustomer(username, password);
+		Customer cst=customerRepository.findByUserNameAndPassword(username, password);
 		if(cst!=null) {
 			return cst;
 		}
