@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adventurelandVillage.adminservice.LoginService;
-import com.adventurelandVillage.exceptions.LoginException;
+import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.LoginDTO;
+import com.adventurelandVillage.service.LoginService;
 
 @RestController
 public class LoginController {
