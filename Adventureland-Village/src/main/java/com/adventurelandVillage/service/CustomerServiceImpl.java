@@ -23,10 +23,6 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public Customer insertCustomer(Customer customer) {
 		Customer cst= customerRepository.save(customer);
-//		List<Ticket>tkts= cst.getTicketes();
-//		for(Ticket tkt:tkts) {
-//			tkt.setTicketId(null);
-//		}
 		return cst;
 	}
 
@@ -57,7 +53,7 @@ public class CustomerServiceImpl implements CustomerService{
 	public List<Customer> viewCustomers() {
 		List<Customer> clist=customerRepository.findAll();
 		if(clist.isEmpty()) {
-			throw new CustomerException("No any customer found.");
+			throw new CustomerException("No customer found.");
 		}
 		else	
 			return clist;
