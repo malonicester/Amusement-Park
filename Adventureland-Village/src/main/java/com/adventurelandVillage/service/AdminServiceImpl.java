@@ -56,10 +56,10 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<Activity> getAllActivities(Long customerId) {
 		// TODO Auto-generated method stub
-//		List<Activity> activities = activityRepo.findByCustomerId(customerId);
-//		if (activities.isEmpty()) {
-//			throw new ActivityException();
-//		}
+		List<Activity> activities = activityRepo.getCustomerId(customerId);
+		if (activities.isEmpty()) {
+			throw new ActivityException();
+		}
 		return null;
 	}
 
@@ -76,38 +76,39 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<Activity> getActivitiesCustomerWise() {
 		// TODO Auto-generated method stub
-//		List<Activity> activities = activityRepo.getActivitiesCustomer();
-//		if (activities.isEmpty()) {
-//			throw new ActivityException();
-//		}
-		return null;
+		List<Activity> activities = activityRepo.getCustomerWise();
+		if (activities.isEmpty()) {
+			throw new ActivityException();
+		}
+		return activities;
 	}
 
 	@Override
 	public List<Activity> getActivitiesDateWise() {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<Activity> getAllActivitiesForDays(Long customerId, LocalDateTime fromDate, LocalDateTime toDate) {
 		// TODO Auto-generated method stub
-//		List<Activity> activities = activityRepo.getActivitiesDate();
-//		if (activities.isEmpty()) {
-//			throw new ActivityException();
-//		}
-		return null;
+		List<Activity> activities = activityRepo.getDateBetween(customerId, fromDate, toDate);
+		if (activities.isEmpty()) {
+			throw new ActivityException();
+		}
+		return activities;
 	}
 
 	@Override
 	public Admin upAdmin(Admin admin, String key) {
 		// TODO Auto-generated method stub
-		CurrentUserSession loggedInUser = sessionRepo.findByUuuid(key);
+		CurrentUserSession loggedInUser = sessionRepo.findByUuid(key);
 		if (loggedInUser == null) {
 			throw new AdminException("please provide a valid key to update a admin");
 
 		}
-		if (admin.getAdminId().equals(loggedInUser.getUserId())) {
+		if (admin.getAdminId()==loggedInUser.getUserId()) {
 			// If loggedinUser id is same as the id of supplied admin which we want to
 			// update
 			return adminRepo.save(admin);
@@ -115,6 +116,14 @@ public class AdminServiceImpl implements AdminService {
 			throw new AdminException("Invalid Admin details,please login first");
 		}
 
+	}
+	
+	public List<Admin> getAdmins(){
+		List<Admin> admins=adminRepo.findAll();
+		if(admins.isEmpty()) {
+			throw new AdminException("admin not there");
+		}
+		return admins;
 	}
 
 }

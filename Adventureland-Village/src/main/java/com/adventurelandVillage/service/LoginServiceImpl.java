@@ -49,7 +49,7 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public String logOutFromAccount(String key) throws LoginException {
 		// TODO Auto-generated method stub
-		CurrentUserSession validAdminSession=sessionRepo.findByUuuid(key);
+		CurrentUserSession validAdminSession=sessionRepo.findByUuid(key);
 		if(validAdminSession==null) {
 			throw new LoginException("User not Logged in with this username");
 			

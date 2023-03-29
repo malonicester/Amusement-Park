@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
 		MyErrorDetails details = new MyErrorDetails();
 		details.setTimestamp(LocalDateTime.now());
 		details.setMessage(adminException.getMessage());
+		details.setDetails("error");
 		return new ResponseEntity<MyErrorDetails>(details, HttpStatus.BAD_REQUEST);
 
 	}

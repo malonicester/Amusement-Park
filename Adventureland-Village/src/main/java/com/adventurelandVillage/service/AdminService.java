@@ -25,4 +25,6 @@ public interface AdminService {
 	public List<Activity> getActivitiesDateWise();
 
 	public List<Activity> getAllActivitiesForDays(Long customerId, LocalDateTime fromDate, LocalDateTime toDate);
+	
+	public List<Admin> getAdmins();
 }

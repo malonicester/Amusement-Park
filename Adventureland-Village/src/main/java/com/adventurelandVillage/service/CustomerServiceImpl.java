@@ -10,14 +10,14 @@ import com.adventurelandVillage.model.Customer;
 import com.adventurelandVillage.repository.CustomerRepository;
 @Service
 public class CustomerServiceImpl implements CustomerService{
-	
+	@Autowired
 	private CustomerRepository customerRepository;
 	
-	@Autowired
-	public CustomerServiceImpl(CustomerRepository customerRepository) {
-
-		this.customerRepository = customerRepository;
-	}
+//	@Autowired
+//	public CustomerServiceImpl(CustomerRepository customerRepository) {
+//
+//		this.customerRepository = customerRepository;
+//	}
 
 	@Override
 	public Customer insertCustomer(Customer customer) {
