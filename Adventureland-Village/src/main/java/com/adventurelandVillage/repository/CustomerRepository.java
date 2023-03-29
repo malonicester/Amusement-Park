@@ -5,7 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import com.adventurelandVillage.model.Customer;
 
+
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
-  public Customer findByMobileNumber(String mobileNumber);
+public interface CustomerRepository extends JpaRepository<Customer, Long>{
+
 }

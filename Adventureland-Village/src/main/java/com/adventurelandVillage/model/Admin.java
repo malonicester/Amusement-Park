@@ -18,4 +18,5 @@ public class Admin extends AbstractUser{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long adminId;
+	
 }
