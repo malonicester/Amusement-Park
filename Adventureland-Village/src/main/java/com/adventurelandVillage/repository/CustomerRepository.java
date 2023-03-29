@@ -6,6 +6,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.adventurelandVillage.model.Customer;
+
+
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long>{
 	@Query("from Customer where username=:un and password=:ps")        

@@ -1,13 +1,12 @@
 package com.adventurelandVillage.exception;
 
-public class CustomerException extends RuntimeException {
-
-	public CustomerException() {
+public class TicketException extends RuntimeException{
+	public TicketException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	public CustomerException(String message) {
+
+	public TicketException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
