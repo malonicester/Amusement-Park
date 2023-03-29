@@ -1,5 +1,6 @@
 package com.adventurelandVillage.adminrepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,8 @@ public interface ActivityRepo extends JpaRepository<Activity, Long> {
 	
 	@Query("select a from Activity a order by a.dateTime")
 	public List<Activity> getActivitiesDate();
+	
+	@Query("select a from Activity a where a.customer.customerId=?1 and a.dateTime>=?2 and a.dateTime<=?3")
+	public List<Activity> getActivityByCustomerDatebetween(Long customerId,LocalDateTime fromDate,LocalDateTime toDate);
 }
 

@@ -31,6 +31,7 @@ private AdminService adminService;
 		return new ResponseEntity<Admin>(ad,HttpStatus.OK);
 	}
 	
+	
 
 
 }

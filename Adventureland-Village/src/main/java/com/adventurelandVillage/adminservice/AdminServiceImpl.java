@@ -86,15 +86,18 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<Activity> getActivitiesDateWise() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Activity> activities = activityRepo.getActivitiesDate();
+		if (activities.isEmpty()) {
+			throw new ActivityException();
+		}
+		return activities;
 	}
 
 	@Override
 	public List<Activity> getAllActivitiesForDays(Long customerId, LocalDateTime fromDate, LocalDateTime toDate) {
+		List<Activity> activities=activityRepo.getActivityByCustomerDatebetween(customerId, fromDate, toDate);
 		// TODO Auto-generated method stub
-		List<Activity> activities = activityRepo.getActivitiesDate();
-		if (activities.isEmpty()) {
+		if(activities.isEmpty()) {
 			throw new ActivityException();
 		}
 		return activities;
