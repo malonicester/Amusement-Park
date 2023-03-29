@@ -1,4 +1,4 @@
-package com.adventurelandVillage.adminservice;
+package com.adventurelandVillage.service;
 
 import java.time.LocalDateTime;
 import java.util.List;

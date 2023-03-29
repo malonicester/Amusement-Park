@@ -1,28 +1,27 @@
-package com.adventurelandVillage.adminservice;
+package com.adventurelandVillage.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.adventurelandVillage.adminrepository.ActivityRepo;
-import com.adventurelandVillage.adminrepository.AdminRepo;
-import com.adventurelandVillage.adminrepository.SessionRepo;
-import com.adventurelandVillage.exceptions.ActivityException;
-import com.adventurelandVillage.exceptions.AdminException;
+
+import com.adventurelandVillage.exception.ActivityException;
+import com.adventurelandVillage.exception.AdminException;
 import com.adventurelandVillage.model.Activity;
 import com.adventurelandVillage.model.Admin;
 import com.adventurelandVillage.model.CurrentUserSession;
-import com.adventurelandVillage.model.Customer;
+import com.adventurelandVillage.repository.ActivityRepository;
+import com.adventurelandVillage.repository.AdminRepo;
+import com.adventurelandVillage.repository.SessionRepo;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private AdminRepo adminRepo;
 	@Autowired
-	private ActivityRepo activityRepo;
+	private ActivityRepository activityRepo;
 	@Autowired
 	private SessionRepo sessionRepo;
 
@@ -57,11 +56,11 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<Activity> getAllActivities(Long customerId) {
 		// TODO Auto-generated method stub
-		List<Activity> activities = activityRepo.findByCustomerId(customerId);
-		if (activities.isEmpty()) {
-			throw new ActivityException();
-		}
-		return activities;
+//		List<Activity> activities = activityRepo.findByCustomerId(customerId);
+//		if (activities.isEmpty()) {
+//			throw new ActivityException();
+//		}
+		return null;
 	}
 
 	@Override
@@ -77,11 +76,11 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<Activity> getActivitiesCustomerWise() {
 		// TODO Auto-generated method stub
-		List<Activity> activities = activityRepo.getActivitiesCustomer();
-		if (activities.isEmpty()) {
-			throw new ActivityException();
-		}
-		return activities;
+//		List<Activity> activities = activityRepo.getActivitiesCustomer();
+//		if (activities.isEmpty()) {
+//			throw new ActivityException();
+//		}
+		return null;
 	}
 
 	@Override
@@ -93,11 +92,11 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<Activity> getAllActivitiesForDays(Long customerId, LocalDateTime fromDate, LocalDateTime toDate) {
 		// TODO Auto-generated method stub
-		List<Activity> activities = activityRepo.getActivitiesDate();
-		if (activities.isEmpty()) {
-			throw new ActivityException();
-		}
-		return activities;
+//		List<Activity> activities = activityRepo.getActivitiesDate();
+//		if (activities.isEmpty()) {
+//			throw new ActivityException();
+//		}
+		return null;
 	}
 
 	@Override

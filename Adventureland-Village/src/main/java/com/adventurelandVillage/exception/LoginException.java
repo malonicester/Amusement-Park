@@ -1,4 +1,4 @@
-package com.adventurelandVillage.exceptions;
+package com.adventurelandVillage.exception;
 
 public class LoginException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.adventurelandVillage.adminservice;
+package com.adventurelandVillage.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -6,12 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.adventurelandVillage.adminrepository.AdminRepo;
-import com.adventurelandVillage.adminrepository.SessionRepo;
-import com.adventurelandVillage.exceptions.LoginException;
+import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.Admin;
 import com.adventurelandVillage.model.CurrentUserSession;
 import com.adventurelandVillage.model.LoginDTO;
+import com.adventurelandVillage.repository.AdminRepo;
+import com.adventurelandVillage.repository.SessionRepo;
 
 import net.bytebuddy.utility.RandomString;
 @Service

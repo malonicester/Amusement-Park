@@ -1,4 +1,4 @@
-package com.adventurelandVillage.exceptions;
+package com.adventurelandVillage.exception;
 
 import java.time.LocalDateTime;
 

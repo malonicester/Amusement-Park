@@ -1,4 +1,4 @@
-package com.adventurelandVillage.adminrepository;
+package com.adventurelandVillage.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

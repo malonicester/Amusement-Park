@@ -1,6 +1,6 @@
-package com.adventurelandVillage.adminservice;
+package com.adventurelandVillage.service;
 
-import com.adventurelandVillage.exceptions.LoginException;
+import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.LoginDTO;
 
 public interface LoginService {
