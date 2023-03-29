@@ -7,6 +7,6 @@ import com.adventurelandVillage.model.Admin;
 
 @Repository
 public interface AdminRepo extends JpaRepository<Admin, Long> {
-	public Admin findByUserName(String userName);
-
+	public Admin findByMobileNumber(String mobileNumber);
+	public Admin findByUserName(String username);
 }
