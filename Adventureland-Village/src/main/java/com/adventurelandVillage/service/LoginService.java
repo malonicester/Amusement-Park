@@ -4,6 +4,11 @@ import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.LoginDTO;
 
 public interface LoginService {
-public String logIntoAccount(LoginDTO dto) throws LoginException;
-public String logOutFromAccount(String key) throws LoginException;
+	public String logIntoAccount(LoginDTO dto) throws LoginException;
+
+	public String logOutFromAccount(String key) throws LoginException;
+
+	public String logInAsUser(LoginDTO loginDTO) throws LoginException;
+
+	public boolean isLoggedIn(String key) throws LoginException;
 }
