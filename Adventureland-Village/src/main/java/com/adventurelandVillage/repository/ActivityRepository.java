@@ -26,7 +26,7 @@ public List<Activity> getCustomerId( Long customerId);
   
   
  // @Query("select a from Activity a join Ticket t on a.activityId=t.activities.activityId where t.customers.customerId=?1 and t.dateTime>=?2 and t.dateTime=?3")
- @Query(value = "SELECT a FROM activity a INNER JOIN ticket t ON a.activity_id = t.activities_activity_id WHERE t.customers_customer_id = ?1 AND t.date_time BETWEEN ?2 AND ?3", nativeQuery = true)
+ @Query(value = "SELECT a.* FROM activity a INNER JOIN ticket t ON a.activity_id = t.activities_activity_id WHERE t.customers_customer_id = ?1 AND t.date_time BETWEEN ?2 AND ?3", nativeQuery = true)
   public List<Activity> getDateBetween(Long customerId,LocalDateTime fromDate,LocalDateTime toDate );
   
 }
