@@ -22,5 +22,5 @@ public class Customer extends AbstractUser {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long customerId;
 	@OneToMany(mappedBy = "customers")
-	private List<Ticket> ticketes;
+	private List<Ticket> tickets;
 }
