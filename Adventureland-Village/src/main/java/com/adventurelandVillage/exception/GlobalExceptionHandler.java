@@ -12,11 +12,13 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+	
 	@ExceptionHandler(AdminException.class)
 	public ResponseEntity<MyErrorDetails> adminException(AdminException adminException, WebRequest webRequest) {
 		MyErrorDetails details = new MyErrorDetails();
 		details.setTimestamp(LocalDateTime.now());
 		details.setMessage(adminException.getMessage());
+		details.setDetails(webRequest.getDescription(false));
 		return new ResponseEntity<MyErrorDetails>(details, HttpStatus.BAD_REQUEST);
 
 	}
@@ -27,6 +29,7 @@ public class GlobalExceptionHandler {
 		MyErrorDetails details = new MyErrorDetails();
 		details.setTimestamp(LocalDateTime.now());
 		details.setMessage(customerException.getMessage());
+		details.setDetails(webRequest.getDescription(false));
 		return new ResponseEntity<MyErrorDetails>(details, HttpStatus.BAD_REQUEST);
 
 	}
@@ -37,6 +40,7 @@ public class GlobalExceptionHandler {
 		MyErrorDetails details = new MyErrorDetails();
 		details.setTimestamp(LocalDateTime.now());
 		details.setMessage(loginException.getMessage());
+		details.setDetails(webRequest.getDescription(false));
 		return new ResponseEntity<MyErrorDetails>(details, HttpStatus.BAD_REQUEST);
 
 	}
@@ -47,6 +51,7 @@ public class GlobalExceptionHandler {
 		MyErrorDetails details = new MyErrorDetails();
 		details.setTimestamp(LocalDateTime.now());
 		details.setMessage(activityException.getMessage());
+		details.setDetails(webRequest.getDescription(false));
 		return new ResponseEntity<MyErrorDetails>(details, HttpStatus.BAD_REQUEST);
 
 	}
@@ -70,22 +75,18 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<String> validationException(MethodArgumentNotValidException exception) {
-		return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
-
+	public ResponseEntity<MyErrorDetails> validationException(MethodArgumentNotValidException exception) {
+		MyErrorDetails errorDetails = new MyErrorDetails();
+		errorDetails.setTimestamp(LocalDateTime.now());
+		errorDetails.setMessage("Validation Error");
+		errorDetails.setDetails(exception.getBindingResult().getFieldError().getDefaultMessage());
+		return new ResponseEntity<MyErrorDetails>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
 	// to handle Not found exception
 	@ExceptionHandler(NoHandlerFoundException.class)
-	public ResponseEntity<MyErrorDetails> mynotFoundHandler(MethodArgumentNotValidException me,
-			NoHandlerFoundException nfe, WebRequest req) {
-
-		// MyErrorDetails err=new MyErrorDetails(LocalDateTime.now(), nfe.getMessage(),
-		// req.getDescription(false));
-		MyErrorDetails err = new MyErrorDetails(LocalDateTime.now(), nfe.getMessage(), req.getDescription(false));
-		err.setTimestamp(LocalDateTime.now());
-		err.setMessage("validation error");
-		err.setDetails(me.getBindingResult().getFieldError().getDefaultMessage());
+	public ResponseEntity<MyErrorDetails> mynotFoundHandler(NoHandlerFoundException exception, WebRequest req) {
+		MyErrorDetails err = new MyErrorDetails(LocalDateTime.now(), exception.getMessage(), req.getDescription(false));
 		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
 
 	}

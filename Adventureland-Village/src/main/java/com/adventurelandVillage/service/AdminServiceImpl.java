@@ -1,14 +1,18 @@
 package com.adventurelandVillage.service;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
-
 
 import com.adventurelandVillage.exception.ActivityException;
 import com.adventurelandVillage.exception.AdminException;
+import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.Activity;
 import com.adventurelandVillage.model.Admin;
 import com.adventurelandVillage.model.CurrentUserSession;
@@ -26,9 +30,8 @@ public class AdminServiceImpl implements AdminService {
 	private SessionRepo sessionRepo;
 
 	@Override
-	public Admin insertAdmin(Admin admin) {
+	public Admin insertAdmin(Admin admin) throws AdminException {
 		Admin admin2 = adminRepo.findByUserName(admin.getUserName());
-		// TODO Auto-generated method stub
 		if (admin2 != null) {
 			throw new AdminException("admin already registered with this username");
 		}
@@ -36,7 +39,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin updateAdmin(Admin admin) {
+	public Admin updateAdmin(Admin admin) throws AdminException {
 		Admin admin2 = adminRepo.findById(admin.getAdminId()).orElseThrow(() -> new AdminException("not found"));
 		if (admin2 == null) {
 			throw new AdminException();
@@ -45,27 +48,23 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin deleteAdmin(Long adminId) {
+	public Admin deleteAdmin(Long adminId) throws AdminException {
 		Admin admin = adminRepo.findById(adminId).orElseThrow(() -> new AdminException("not found"));
-
 		adminRepo.delete(admin);
-
 		return admin;
 	}
 
 	@Override
 	public List<Activity> getAllActivities(Long customerId) {
-		// TODO Auto-generated method stub
-//		List<Activity> activities = activityRepo.findByCustomerId(customerId);
-//		if (activities.isEmpty()) {
-//			throw new ActivityException();
-//		}
+		List<Activity> activities = activityRepo.getCustomerId(customerId);
+		if (activities.isEmpty()) {
+			throw new ActivityException();
+		}
 		return null;
 	}
 
 	@Override
 	public List<Activity> getListActivitiees() {
-		// TODO Auto-generated method stub
 		List<Activity> activities = activityRepo.findAll();
 		if (activities.isEmpty()) {
 			throw new ActivityException();
@@ -75,46 +74,58 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public List<Activity> getActivitiesCustomerWise() {
-		// TODO Auto-generated method stub
-//		List<Activity> activities = activityRepo.getActivitiesCustomer();
-//		if (activities.isEmpty()) {
-//			throw new ActivityException();
-//		}
-		return null;
+		List<Activity> activities = activityRepo.getCustomerWise();
+		if (activities.isEmpty()) {
+			throw new ActivityException();
+		}
+		return activities;
 	}
 
 	@Override
 	public List<Activity> getActivitiesDateWise() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Activity> getAllActivitiesForDays(Long customerId, LocalDateTime fromDate, LocalDateTime toDate) {
-		// TODO Auto-generated method stub
-//		List<Activity> activities = activityRepo.getActivitiesDate();
-//		if (activities.isEmpty()) {
-//			throw new ActivityException();
-//		}
-		return null;
+		List<Activity> activities = activityRepo.getDateBetween(customerId, fromDate, toDate);
+		if (activities.isEmpty()) {
+			throw new ActivityException();
+		}
+		return activities;
 	}
 
 	@Override
-	public Admin upAdmin(Admin admin, String key) {
-		// TODO Auto-generated method stub
-		CurrentUserSession loggedInUser = sessionRepo.findByUuuid(key);
-		if (loggedInUser == null) {
-			throw new AdminException("please provide a valid key to update a admin");
+	public Admin upAdmin(String uuid, Map<String, Object> fields) throws LoginException, AdminException {
 
-		}
-		if (admin.getAdminId().equals(loggedInUser.getUserId())) {
-			// If loggedinUser id is same as the id of supplied admin which we want to
-			// update
+		CurrentUserSession currentUserSession = sessionRepo.findByUuid(uuid);
+		if (currentUserSession == null)
+			throw new LoginException("Please Login First");
+
+		Optional<Admin> optional = adminRepo.findById(currentUserSession.getUserId());
+		if (optional.isPresent()) {
+
+			Admin admin = optional.get();
+
+			fields.forEach((key, value) -> {
+
+				Field field = ReflectionUtils.findField(Admin.class, key);
+
+				field.setAccessible(true);
+
+				ReflectionUtils.setField(field, admin, value);
+			});
 			return adminRepo.save(admin);
-		} else {
-			throw new AdminException("Invalid Admin details,please login first");
 		}
+		throw new AdminException("No Admin Found");
+	}
 
+	public List<Admin> getAdmins() throws AdminException {
+		List<Admin> admins = adminRepo.findAll();
+		if (admins.isEmpty()) {
+			throw new AdminException("admin not there");
+		}
+		return admins;
 	}
 
 }

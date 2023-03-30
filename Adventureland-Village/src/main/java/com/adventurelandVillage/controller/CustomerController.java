@@ -3,6 +3,7 @@ package com.adventurelandVillage.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,28 +13,33 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adventurelandVillage.model.Customer;
+import com.adventurelandVillage.model.LoginDTO;
 import com.adventurelandVillage.service.CustomerService;
+import com.adventurelandVillage.service.LoginService;
 
 import jakarta.validation.Valid;
 
 @RestController
 public class CustomerController {
-	
+
 	private CustomerService CustomerService;
+
 	@Autowired
 	public CustomerController(com.adventurelandVillage.service.CustomerService customerService) {
 		super();
 		CustomerService = customerService;
 	}
-	
+
 	@PostMapping("/customer")
-	public ResponseEntity<Customer> insertCustomerHandler(@Valid @RequestBody Customer customer){
-		Customer cust=CustomerService.insertCustomer(customer);
-		return new ResponseEntity<Customer>(cust,HttpStatus.CREATED);
+	public ResponseEntity<Customer> insertCustomerHandler(@Valid @RequestBody Customer customer) {
+		Customer cust = CustomerService.insertCustomer(customer);
+		return new ResponseEntity<Customer>(cust, HttpStatus.CREATED);
 	}
+
 	
 	@PutMapping("/customer")
 	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer){
@@ -64,6 +70,13 @@ public class CustomerController {
 			@Valid @PathVariable("password") String password){
 		Customer cust=CustomerService.validateCustomer(username, password);
 		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
+
+
+	@PutMapping("/customer")
+	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer) {
+		Customer cust = CustomerService.insertCustomer(customer);
+		return new ResponseEntity<Customer>(cust, HttpStatus.CREATED);
+
 	}
 
 }
