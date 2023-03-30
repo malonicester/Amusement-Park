@@ -11,7 +11,7 @@ import com.adventurelandVillage.model.Ticket;
 
 public interface TicketService {
 
-	public Ticket insertTicketBooking(Ticket ticket, Long activityId) throws ActivityException, TicketException, LoginException;
+	public Ticket insertTicketBooking(Ticket ticket, Long activityId, String uuid) throws ActivityException, TicketException, LoginException;
 
 	public Ticket updateTicketBooking(Long ticketId, Long activityId) throws ActivityException, TicketException, LoginException;
 

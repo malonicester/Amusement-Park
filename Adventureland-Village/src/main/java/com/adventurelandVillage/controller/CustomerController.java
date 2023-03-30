@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 public class CustomerController {
 
 	private CustomerService CustomerService;
-
+	
 	@Autowired
 	public CustomerController(com.adventurelandVillage.service.CustomerService customerService) {
 		super();
@@ -39,7 +39,7 @@ public class CustomerController {
 	
 	@PutMapping("/customer")
 	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer){
-		Customer cust=CustomerService.insertCustomer(customer);
+		Customer cust=CustomerService.updateCustomer(customer);
 		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
 	}
 	
