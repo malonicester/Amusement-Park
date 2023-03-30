@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.adventurelandVillage.model.Activity;
 import com.adventurelandVillage.model.Ticket;
 
 @Repository
@@ -18,5 +19,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 	@Query("select t from Ticket t where t.dateTime>=?1 and t.dateTime<=?2")
 	public List<Ticket> getTicketBetweenDate(LocalDateTime fromDate, LocalDateTime toDate);
 
-	
+	@Query("select t.activities from Ticket t where t.customers.customerId=?1")
+	public List<Activity> getActivityByCustomer(Long customerId);
+
 }
