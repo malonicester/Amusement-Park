@@ -11,11 +11,11 @@ import com.adventurelandVillage.model.Ticket;
 
 public interface TicketService {
 
-	public Ticket insertTicketBooking(Ticket ticket, Integer activityId) throws ActivityException, TicketException, LoginException;
+	public Ticket insertTicketBooking(Ticket ticket, Long activityId) throws ActivityException, TicketException, LoginException;
 
-	public Ticket updateTicketBooking(Integer ticketId, Integer activityId) throws ActivityException, TicketException, LoginException;
+	public Ticket updateTicketBooking(Long ticketId, Long activityId) throws ActivityException, TicketException, LoginException;
 
-	public Ticket deleteTicketBooking(Integer ticketId) throws TicketException, LoginException;
+	public Ticket deleteTicketBooking(Long ticketId) throws TicketException, LoginException;
 
 	public List<Ticket> viewAllTicketCustomer() throws TicketException, CustomerException, LoginException;
 
