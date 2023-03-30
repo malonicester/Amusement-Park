@@ -18,7 +18,7 @@ public  List<Activity> findByChargesLessThan(float charges);
 //  @Query("select a from Activity a join Ticket t on a.activityId=t.activities.activityId where t.customers.customerId=?1")
 //  public List<Activity> getCustomerId(Long customerId);
 
-@Query(value = "SELECT * FROM activity a JOIN ticket t ON a.activity_id = t.activities_activity_id JOIN customer c ON t.customers_customer_id = c.customer_id WHERE c.customer_id = ?1", nativeQuery = true)
+@Query(value = "SELECT a.* FROM activity a JOIN ticket t ON a.activity_id = t.activities_activity_id JOIN customer c ON t.customers_customer_id = c.customer_id WHERE c.customer_id = ?1", nativeQuery = true)
 public List<Activity> getCustomerId( Long customerId);
   
  @Query("select a from Activity a join Ticket t on a.activityId=t.activities.activityId group by t.customers")
