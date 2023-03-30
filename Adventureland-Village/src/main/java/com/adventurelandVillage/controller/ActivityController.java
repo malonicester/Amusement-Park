@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adventurelandVillage.model.Activity;
+import com.adventurelandVillage.repository.ActivityRepository;
 import com.adventurelandVillage.service.ActivityService;
 
 import jakarta.validation.Valid;
@@ -27,7 +28,12 @@ public class ActivityController {
 
     @Autowired
     private ActivityService activityService;
-
+    
+    @GetMapping("/")
+    public String home() {
+        return "Welcome to the activity application!";
+    }
+    
     // Create activity
     @PostMapping("")
     public Activity createActivity(@Valid @RequestBody Activity activity) {
@@ -48,7 +54,7 @@ public class ActivityController {
 
     // Get activity by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Activity> getActivityById(@PathVariable(value = "id") int activityId)
+    public ResponseEntity<Activity> getActivityById(@PathVariable(value = "id") Long activityId)
             throws ConfigDataResourceNotFoundException {
         Activity activity = activityService.getActivityById(activityId);
         return ResponseEntity.ok().body(activity);
@@ -72,6 +78,5 @@ public class ActivityController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
-
 
 }

@@ -2,6 +2,7 @@ package com.adventurelandVillage.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.adventurelandVillage.model.Activity;
@@ -9,10 +10,17 @@ import com.adventurelandVillage.model.Customer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long>{
-public  List<Activity> findByChargesLessThan(float charges);
+	
+	
+   public Optional<Activity> findByDescription(String name);
+   
+   public Activity findByActivityId(Long activityId);
+	
+  public  List<Activity> findByChargesLessThan(float charges);
 	
   @Query("select a from Activity a join Ticket t on a.activityId=t.activities.activityId where t.customers.customerId=?1")
   public List<Activity> getCustomerId(Long customerId);
@@ -25,5 +33,6 @@ public  List<Activity> findByChargesLessThan(float charges);
   @Query("select a from Activity a join Ticket t on a.activityId=t.activities.activityId where t.customers.customerId=?1 and t.dateTime>=?2 and t.dateTime=?3")
   public List<Activity> getDateBetween(Long customerId,LocalDateTime fromDate,LocalDateTime toDate );
   
-  
+  @Query("select count(activityId) from Activity  where charges = ?1")
+  int countActivitiesOfCharges(@Param("charges") float charges);
 }
