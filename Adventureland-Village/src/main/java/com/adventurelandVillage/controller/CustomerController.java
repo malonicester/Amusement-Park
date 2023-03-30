@@ -72,11 +72,5 @@ public class CustomerController {
 		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
 
 
-	@PutMapping("/customer")
-	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer) {
-		Customer cust = CustomerService.insertCustomer(customer);
-		return new ResponseEntity<Customer>(cust, HttpStatus.CREATED);
-
-	}
-
+	}	
 }
