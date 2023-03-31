@@ -1,6 +1,5 @@
 package com.adventurelandVillage.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +69,7 @@ public class CustomerController {
 			@Valid @PathVariable("key")String key){
 		Customer cust=CustomerService.validateCustomer(username, password,key);
 		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
+
 
 
 	}

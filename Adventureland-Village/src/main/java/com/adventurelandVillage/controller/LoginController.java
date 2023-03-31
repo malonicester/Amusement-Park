@@ -20,7 +20,7 @@ public class LoginController {
 	@PostMapping("/login")
 	public ResponseEntity<String> logInCustomer(@RequestBody LoginDTO dto) throws LoginException {
 
-		String result = loginService.logIntoAccount(dto);
+		String result = loginService.logInAsUser(dto);
 
 		return new ResponseEntity<String>(result, HttpStatus.OK);
 
