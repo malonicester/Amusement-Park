@@ -46,7 +46,7 @@ public class AdminServiceImpl implements AdminService {
 	public Admin updateAdmin(Admin admin) throws AdminException {
 		Admin admin2 = adminRepo.findById(admin.getAdminId()).orElseThrow(() -> new AdminException("not found"));
 		if (admin2 == null) {
-			throw new AdminException();
+			throw new AdminException("admin not found");
 		}
 		return adminRepo.save(admin2);
 	}
@@ -62,7 +62,7 @@ public class AdminServiceImpl implements AdminService {
 	public List<Activity> getAllActivitiesByCustomer(Long customerId) {
 		List<Activity> activities = ticketRepository.getActivityByCustomer(customerId);
 		if (activities.isEmpty()) {
-			throw new ActivityException();
+			throw new ActivityException("Admin not found");
 		}
 		return activities;
 	}
