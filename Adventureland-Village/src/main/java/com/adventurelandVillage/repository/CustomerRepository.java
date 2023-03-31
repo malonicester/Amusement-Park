@@ -10,9 +10,8 @@ import com.adventurelandVillage.model.Customer;
 import com.adventurelandVillage.model.Ticket;
 
 @Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
-//	@Query("from Customer where username=:un and password=:ps")        
-	public Customer findByUserNameAndPassword(String userName, String password);
+public interface CustomerRepository extends JpaRepository<Customer, Long>{      
+	public Customer findByUserNameAndPassword(String userName,String password);
 
 	public Customer findByMobileNumber(String mobileNumber);
 

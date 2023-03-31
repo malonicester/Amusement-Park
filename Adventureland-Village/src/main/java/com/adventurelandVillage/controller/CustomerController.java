@@ -35,35 +35,43 @@ public class CustomerController {
 		return new ResponseEntity<Customer>(cust, HttpStatus.CREATED);
 	}
 
-	@PutMapping("/customer")
-	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer) {
-		Customer cust = CustomerService.updateCustomer(customer);
-		return new ResponseEntity<Customer>(cust, HttpStatus.OK);
+	
+	@PutMapping("/customer/{key}")
+	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer,
+			@Valid @PathVariable("key")String key){
+		Customer cust=CustomerService.updateCustomer(customer, key);
+		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
 	}
-
-	@DeleteMapping("/customer/{customerId}")
-	public ResponseEntity<String> deleteCustomerHandler(@Valid @PathVariable("customerId") Long customerId) {
-		String resp = CustomerService.deleteCustomer(customerId);
-		return new ResponseEntity<String>(resp, HttpStatus.OK);
+	
+	@DeleteMapping("/customer/{customerId}/{key}")
+	public ResponseEntity<String> deleteCustomerHandler(@Valid @PathVariable("customerId") Long customerId,
+			@Valid @PathVariable("key")String key){
+		String resp=CustomerService.deleteCustomer(customerId,key);
+		return new ResponseEntity<String>(resp,HttpStatus.OK);
 	}
-
-	@GetMapping("/customers")
-	public ResponseEntity<List<Customer>> viewCustomersHandler() {
-		List<Customer> custs = CustomerService.viewCustomers();
-		return new ResponseEntity<List<Customer>>(custs, HttpStatus.OK);
+	
+	@GetMapping("/customers/{key}")
+	public ResponseEntity<List<Customer>> viewCustomersHandler(@Valid @PathVariable("key")String key){
+		List<Customer> custs=CustomerService.viewCustomers(key);
+		return new ResponseEntity<List<Customer>>(custs,HttpStatus.OK);
 	}
-
-	@GetMapping("/customer/{customerId}")
-	public ResponseEntity<Customer> viewCustomerHandler(@Valid @PathVariable("customerId") Long customerId) {
-		Customer cust = CustomerService.viewCustomer(customerId);
-		return new ResponseEntity<Customer>(cust, HttpStatus.OK);
+	
+	@GetMapping("/customer/{customerId}/{key}")
+	public ResponseEntity<Customer> viewCustomerHandler(@Valid @PathVariable("customerId") Long customerId,
+			@Valid @PathVariable("key")String key){
+		Customer cust=CustomerService.viewCustomer(customerId,key);
+		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
 	}
-
-	@GetMapping("/customer/{username}/{password}")
+	
+	@GetMapping("/customer/{username}/{password}/{key}")
 	public ResponseEntity<Customer> validateCustomerHandler(@Valid @PathVariable("username") String username,
-			@Valid @PathVariable("password") String password) {
-		Customer cust = CustomerService.validateCustomer(username, password);
-		return new ResponseEntity<Customer>(cust, HttpStatus.OK);
+			@Valid @PathVariable("password") String password,
+			@Valid @PathVariable("key")String key){
+		Customer cust=CustomerService.validateCustomer(username, password,key);
+		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
+
+
+
 	}
 
 }
