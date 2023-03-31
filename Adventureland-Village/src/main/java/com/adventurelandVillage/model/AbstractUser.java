@@ -23,7 +23,7 @@ public abstract class AbstractUser {
 	@Size(min = 5)
 	private String userName;
 
-	//@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
 	private String password;
 
 	@NotNull
@@ -33,7 +33,7 @@ public abstract class AbstractUser {
 	private String address;
 
 	@Column(unique = true)
-	//@Pattern(regexp = "^[6-9]\\d{9}$")
+	@Pattern(regexp = "^[6-9]\\d{9}$")
 	private String mobileNumber;
 
 	@Column(unique = true)

@@ -1,6 +1,5 @@
 package com.adventurelandVillage.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ import jakarta.validation.Valid;
 public class CustomerController {
 
 	private CustomerService CustomerService;
-	
+
 	@Autowired
 	public CustomerController(com.adventurelandVillage.service.CustomerService customerService) {
 		super();
@@ -36,40 +35,35 @@ public class CustomerController {
 		return new ResponseEntity<Customer>(cust, HttpStatus.CREATED);
 	}
 
-	
 	@PutMapping("/customer")
-	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer){
-		Customer cust=CustomerService.updateCustomer(customer);
-		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
+	public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer) {
+		Customer cust = CustomerService.updateCustomer(customer);
+		return new ResponseEntity<Customer>(cust, HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/customer/{customerId}")
-	public ResponseEntity<String> deleteCustomerHandler(@Valid @PathVariable("customerId") Long customerId){
-		String resp=CustomerService.deleteCustomer(customerId);
-		return new ResponseEntity<String>(resp,HttpStatus.OK);
+	public ResponseEntity<String> deleteCustomerHandler(@Valid @PathVariable("customerId") Long customerId) {
+		String resp = CustomerService.deleteCustomer(customerId);
+		return new ResponseEntity<String>(resp, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/customers")
-	public ResponseEntity<List<Customer>> viewCustomersHandler(){
-		List<Customer> custs=CustomerService.viewCustomers();
-		return new ResponseEntity<List<Customer>>(custs,HttpStatus.OK);
+	public ResponseEntity<List<Customer>> viewCustomersHandler() {
+		List<Customer> custs = CustomerService.viewCustomers();
+		return new ResponseEntity<List<Customer>>(custs, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/customer/{customerId}")
-	public ResponseEntity<Customer> viewCustomerHandler(@Valid @PathVariable("customerId") Long customerId){
-		Customer cust=CustomerService.viewCustomer(customerId);
-		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
+	public ResponseEntity<Customer> viewCustomerHandler(@Valid @PathVariable("customerId") Long customerId) {
+		Customer cust = CustomerService.viewCustomer(customerId);
+		return new ResponseEntity<Customer>(cust, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/customer/{username}/{password}")
 	public ResponseEntity<Customer> validateCustomerHandler(@Valid @PathVariable("username") String username,
-			@Valid @PathVariable("password") String password){
-		Customer cust=CustomerService.validateCustomer(username, password);
-		return new ResponseEntity<Customer>(cust,HttpStatus.OK);
-
-
-
-	}	
-
+			@Valid @PathVariable("password") String password) {
+		Customer cust = CustomerService.validateCustomer(username, password);
+		return new ResponseEntity<Customer>(cust, HttpStatus.OK);
 	}
 
+}
