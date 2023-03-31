@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.adventurelandVillage.dto.CustomerTicketDTO;
 import com.adventurelandVillage.exception.ActivityException;
@@ -19,51 +20,52 @@ import com.adventurelandVillage.repository.CustomerRepository;
 import com.adventurelandVillage.repository.SessionRepo;
 import com.adventurelandVillage.repository.TicketRepository;
 
-public class TicketServiceImpl implements TicketService{
-	
+@Service
+public class TicketServiceImpl implements TicketService {
+
 	@Autowired
-	LoginService islogInLogout;
-	
+	private LoginService islogInLogout;
+
 	@Autowired
-	ActivityRepository activityRepo;
-	
+	private ActivityRepository activityRepo;
+
 	@Autowired
-	SessionRepo sessionRepo;
-	
+	private SessionRepo sessionRepo;
+
 	@Autowired
-	CustomerRepository customerRepo;
-	
+	private CustomerRepository customerRepo;
+
 	@Autowired
-	TicketRepository ticketRepo;
+	private TicketRepository ticketRepo;
 
 	@Override
 	public Ticket insertTicketBooking(Ticket ticket, Long activityId, String uuid)
 			throws ActivityException, TicketException, LoginException {
-		if(islogInLogout.isLoggedIn(uuid)==false) {
+		if (islogInLogout.isLoggedIn(uuid) == false) {
 			throw new LoginException("Please Login first !!!");
 		}
-		
-		Optional<Activity> optinalActivity=activityRepo.findById(activityId);
-		
-		if(optinalActivity.isPresent()) {
-			CurrentUserSession currUser=sessionRepo.findByUuid(uuid);
-			
-			Optional<Customer> optionalCustomer=customerRepo.findById(currUser.getUserId());
-			
-			Customer customer=optionalCustomer.get();
-			
+
+		Optional<Activity> optinalActivity = activityRepo.findById(activityId);
+
+		if (optinalActivity.isPresent()) {
+			CurrentUserSession currUser = sessionRepo.findByUuid(uuid);
+
+			Optional<Customer> optionalCustomer = customerRepo.findById(currUser.getUserId());
+
+			Customer customer = optionalCustomer.get();
+
 			ticket.setCustomers(customer);
-			
+
 			customer.getTickets().add(ticket);
-			
+
 			ticket.setActivities(optinalActivity.get());
-			
+
 			return ticketRepo.save(ticket);
-			
+
 		}
-		
-		throw new ActivityException("Activity not found with ID "+activityId);
-		
+
+		throw new ActivityException("Activity not found with ID " + activityId);
+
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package com.adventurelandVillage.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +23,7 @@ public class Customer extends AbstractUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long customerId;
+	@JsonIgnore
 	@OneToMany(mappedBy = "customers")
 	private List<Ticket> tickets;
 }

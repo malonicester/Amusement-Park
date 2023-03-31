@@ -18,7 +18,7 @@ public interface AdminService {
 
 	public Admin deleteAdmin(Long adminId);
 
-	public List<Activity> getAllActivities(Long customerId);
+	public List<Activity> getAllActivitiesByCustomer(Long customerId);
 
 	public List<Activity> getListActivitiees();
 

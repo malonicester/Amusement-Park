@@ -19,6 +19,7 @@ import com.adventurelandVillage.model.CurrentUserSession;
 import com.adventurelandVillage.repository.ActivityRepository;
 import com.adventurelandVillage.repository.AdminRepo;
 import com.adventurelandVillage.repository.SessionRepo;
+import com.adventurelandVillage.repository.TicketRepository;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -28,6 +29,9 @@ public class AdminServiceImpl implements AdminService {
 	private ActivityRepository activityRepo;
 	@Autowired
 	private SessionRepo sessionRepo;
+
+	@Autowired
+	private TicketRepository ticketRepository;
 
 	@Override
 	public Admin insertAdmin(Admin admin) throws AdminException {
@@ -55,12 +59,12 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Activity> getAllActivities(Long customerId) {
-		List<Activity> activities = activityRepo.getCustomerId(customerId);
+	public List<Activity> getAllActivitiesByCustomer(Long customerId) {
+		List<Activity> activities = ticketRepository.getActivityByCustomer(customerId);
 		if (activities.isEmpty()) {
 			throw new ActivityException();
 		}
-		return null;
+		return activities;
 	}
 
 	@Override

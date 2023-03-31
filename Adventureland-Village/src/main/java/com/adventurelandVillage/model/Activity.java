@@ -19,6 +19,4 @@ public class Activity {
 	private Long activityId;
 	private String description;
 	private float charges;
-	@OneToOne(mappedBy = "activities")
-	private Ticket ticket;
 }
