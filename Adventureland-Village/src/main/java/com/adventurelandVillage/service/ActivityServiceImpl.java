@@ -1,10 +1,12 @@
 package com.adventurelandVillage.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.adventurelandVillage.exception.ActivityException;
 import com.adventurelandVillage.model.Activity;
 import com.adventurelandVillage.repository.ActivityRepository;
 
@@ -38,9 +40,14 @@ public class ActivityServiceImpl implements ActivityService {
 		return activityRepository.save(activity);
 	}
 
-	public void deleteActivity(Long activityId) {
-		activityRepository.deleteById(activityId);
-
+	public Activity deleteActivity(Long activityId) throws ActivityException {
+		Optional<Activity> optional = activityRepository.findById(activityId);
+		if (optional.isPresent()) {
+			Activity activity = optional.get();
+			activityRepository.delete(activity);
+			return activity;
+		}
+		throw new ActivityException("No Activity Found with id " + activityId);
 	}
 
 	public Activity getActivityById(long activityId) {
