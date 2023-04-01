@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adventurelandVillage.dto.CustomerActivityDTO;
 import com.adventurelandVillage.model.Activity;
 import com.adventurelandVillage.model.Admin;
 import com.adventurelandVillage.service.AdminService;
@@ -70,5 +71,8 @@ public class AdminController {
 		List<Admin> admins = adminService.getAdmins();
 		return new ResponseEntity<List<Admin>>(admins, HttpStatus.OK);
 	}
-
+	@GetMapping("/admin/customerwise")
+	public ResponseEntity<List<CustomerActivityDTO>> getActivitiesCustomerWiseHandler(@RequestParam String uuid){
+		return new ResponseEntity<>(adminService.getActivitiesCustomerWise(uuid),HttpStatus.OK);
+	}
 }
