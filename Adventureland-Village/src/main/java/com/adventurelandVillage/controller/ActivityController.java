@@ -47,6 +47,7 @@ public class ActivityController {
 		return activityService.getActivitiesByCharges(charges);
 	}
 
+
     // Get activity by ID
     @GetMapping("/{id}")
     public ResponseEntity<Activity> getActivityById(@PathVariable(value = "id") Long activityId)
@@ -57,7 +58,7 @@ public class ActivityController {
 
 	// Update activity
 	@PutMapping("/{id}")
-	public ResponseEntity<Activity> updateActivity(@PathVariable(value = "id") int activityId,
+	public ResponseEntity<Activity> updateActivity(@PathVariable(value = "id") Long activityId,
 			@Valid @RequestBody Activity activityDetails) throws ConfigDataResourceNotFoundException {
 		Activity updatedActivity = activityService.updateActivity(activityDetails);
 		return ResponseEntity.ok(updatedActivity);

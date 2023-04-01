@@ -56,26 +56,21 @@ public class ActivityServiceImpl implements ActivityService {
 		}else {	
 			return alist;
 		}
+
 	}
-	
-	
 	@Override
-	public int countActivitiesOfCharges(float charges) {
-		int actCount=0;		  
-	  	if(actCount==0) {
-			throw new ActivityException("No activity found.");
-		}else {	
-			return activityRepository.countActivitiesOfCharges(charges);
-		
-		}
-		return activityRepository.findByChargesLessThan(charges);
+	public Activity getActivityById(Long Activityid) {
+		return activityRepository.findById(Activityid).orElseThrow(()->new ActivityException("No Activity Foundw with id " + Activityid));
 	}
 
-	public Activity getActivityById(Long Activityid) {
-		return activityRepository.findById(Activityid).orElse(null);
-	}
+	public Activity updateActivity(Activity activity) throws ActivityException{
+		Optional<Activity> actvty=activityRepository.findById(activity.getActivityId());
+		if(actvty.isPresent()) {
+			return activityRepository.save(activity);			
+		}else {
+			throw new ActivityException("No any Activity found by activityId : "+activity.getActivityId());
+		}
 	
-	//-=-=-==-=-=-=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=--=-=-=-=-=-=-=-=-//
 	@Override
 	public List<Activity> getAllActivities() {
 		// TODO Auto-generated method stub
@@ -97,6 +92,17 @@ public class ActivityServiceImpl implements ActivityService {
 			return activity;
 		}
 		throw new ActivityException("No Activity Found with id " + activityId);
+	}
+
+	@Override
+	public int countActivitiesOfCharges(float charges) {
+		int actCount=0;		  
+	  	if(actCount==0) {
+			throw new ActivityException("No activity found.");
+		}else {	
+			return activityRepository.countActivitiesOfCharges(charges);
+		
+		}
 	}
 
 }

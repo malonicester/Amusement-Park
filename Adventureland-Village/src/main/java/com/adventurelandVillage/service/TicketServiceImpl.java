@@ -126,7 +126,6 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public CustomerTicketDTO calculateBill(Long customerId,String uuid) throws TicketException, LoginException, CustomerException {
-		// first find if customer from current session is same as customerId
 		if (islogInLogout.isLoggedIn(uuid) == false) {
 			throw new LoginException("Please Login first !!!");
 		}
