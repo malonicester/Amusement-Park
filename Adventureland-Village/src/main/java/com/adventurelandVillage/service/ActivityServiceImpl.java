@@ -19,9 +19,7 @@ public class ActivityServiceImpl implements ActivityService {
 	@Override
 	public Activity addActivity(Activity activity) {
 		return activityRepository.save(activity);
-	}
-
-	
+	}	
 	@Override
 	public Activity updateActivity(Activity activity) throws ActivityException{
 		Optional<Activity> actvty=activityRepository.findById(activity.getActivityId());
@@ -31,9 +29,7 @@ public class ActivityServiceImpl implements ActivityService {
 			throw new ActivityException("No any Activity found by activityId : "+activity.getActivityId());
 		}
 
-	}
-	
-	
+	}	
 	@Override
 	public List<Activity> getActivitiesByCharges(float charges) {
 		List<Activity> alist=activityRepository.findByChargesLessThan(charges);
@@ -42,22 +38,16 @@ public class ActivityServiceImpl implements ActivityService {
 		}else {	
 			return alist;
 		}
-
 	}
 	@Override
 	public Activity getActivityById(Long Activityid) {
 		return activityRepository.findById(Activityid).orElseThrow(()->new ActivityException("No Activity Foundw with id " + Activityid));
 	}
-
-
 	@Override
 	public List<Activity> getAllActivities() {
 		// TODO Auto-generated method stub
 		return activityRepository.findAll();
 	}
-
-
-
 	public Activity deleteActivity(Long activityId) throws ActivityException {
 		Optional<Activity> optional = activityRepository.findById(activityId);
 		if (optional.isPresent()) {
