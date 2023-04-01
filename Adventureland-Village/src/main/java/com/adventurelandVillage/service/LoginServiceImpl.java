@@ -103,7 +103,10 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public boolean isAdmin(String uuid) throws AdminException {
-		return sessionRepo.findByUuid(uuid).getRole().equals(Role.ADMIN);
+		CurrentUserSession currentUserSesion = sessionRepo.findByUuid(uuid);
+		if (currentUserSesion == null)
+			throw new AdminException("No Admin Found");
+		return currentUserSesion.getRole().equals(Role.ADMIN);
 	}
 
 }

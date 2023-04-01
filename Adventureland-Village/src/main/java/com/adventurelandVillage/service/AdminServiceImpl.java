@@ -5,11 +5,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import com.adventurelandVillage.dto.CustomerActivityDTO;
 import com.adventurelandVillage.exception.ActivityException;
 import com.adventurelandVillage.exception.AdminException;
 import com.adventurelandVillage.exception.LoginException;
@@ -18,6 +20,7 @@ import com.adventurelandVillage.model.Admin;
 import com.adventurelandVillage.model.CurrentUserSession;
 import com.adventurelandVillage.repository.ActivityRepository;
 import com.adventurelandVillage.repository.AdminRepo;
+import com.adventurelandVillage.repository.CustomerRepository;
 import com.adventurelandVillage.repository.SessionRepo;
 import com.adventurelandVillage.repository.TicketRepository;
 
@@ -32,6 +35,12 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private TicketRepository ticketRepository;
+
+	@Autowired
+	private CustomerRepository customerRepository;
+
+	@Autowired
+	private LoginService loginSerivce;
 
 	@Override
 	public Admin insertAdmin(Admin admin) throws AdminException {
@@ -77,12 +86,17 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Activity> getActivitiesCustomerWise() {
-		List<Activity> activities = activityRepo.getCustomerWise();
-		if (activities.isEmpty()) {
-			throw new ActivityException("Actvity not found");
-		}
-		return activities;
+	public List<CustomerActivityDTO> getActivitiesCustomerWise(String uuid) {
+		if (loginSerivce.isAdmin(uuid))
+			throw new LoginException("Please Login As admin for the access");
+		List<CustomerActivityDTO> customerActivityDTO = customerRepository.findAll().stream()
+				.map((e) -> new CustomerActivityDTO(e.getCustomerId(), e.getUserName(),
+						ticketRepository.getActivityByCustomer(e.getCustomerId())))
+				.collect(Collectors.toList()).stream().filter((e) -> !e.getActivities().isEmpty())
+				.collect(Collectors.toList());
+		if (customerActivityDTO.isEmpty())
+			throw new ActivityException("No Customers Found");
+		return customerActivityDTO;
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public class TicketServiceImpl implements TicketService {
 	public Ticket insertTicketBooking(Ticket ticket, Long activityId, String uuid)
 			throws ActivityException, TicketException, LoginException {
 		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login first !!!");
+			throw new LoginException("Please Login as Admin !!!");
 		}
 
 		Optional<Activity> optinalActivity = activityRepo.findById(activityId);
@@ -73,7 +73,7 @@ public class TicketServiceImpl implements TicketService {
 	public Ticket updateTicketBooking(Long ticketId, Long activityId,String uuid)
 			throws ActivityException, TicketException, LoginException {
 		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login first !!!");
+			throw new LoginException("Please Login as Admin !!!");
 		}
 
 		Ticket ticket = ticketRepo.findById(ticketId).orElseThrow(() -> new TicketException("Ticket not found..."));
@@ -93,7 +93,7 @@ public class TicketServiceImpl implements TicketService {
 		// use parameter customerId to check if current session customer is same as
 		// customer from customerId
 		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login first !!!");
+			throw new LoginException("Please Login as Admin !!!");
 		}
 		String res = "Failed,Please try again...";
 		Ticket ticket = ticketRepo.findById(ticketId).orElseThrow(() -> new TicketException("Ticket ID not found..."));
@@ -114,7 +114,7 @@ public class TicketServiceImpl implements TicketService {
 		// use parameter customerId to check if current session customer is same as
 		// customer from customerId
 		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login first !!!");
+			throw new LoginException("Please Login as Admin !!!");
 		}
 		Customer customer = customerRepo.findById(customerId)
 				.orElseThrow(() -> new CustomerException("Customer not found.."));
@@ -127,7 +127,7 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public CustomerTicketDTO calculateBill(Long customerId,String uuid) throws TicketException, LoginException, CustomerException {
 		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login first !!!");
+			throw new LoginException("Please Login as Admin !!!!!!");
 		}
 		float charges = 0;
 		Customer customer = customerRepo.findById(customerId)
