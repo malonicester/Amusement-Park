@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adventurelandVillage.model.Activity;
+import com.adventurelandVillage.repository.ActivityRepository;
 import com.adventurelandVillage.service.ActivityService;
 
 import jakarta.validation.Valid;
@@ -23,6 +24,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/activities")
 public class ActivityController {
+
 
 	@Autowired
 	private ActivityService activityService;
@@ -45,13 +47,14 @@ public class ActivityController {
 		return activityService.getActivitiesByCharges(charges);
 	}
 
-	// Get activity by ID
-	@GetMapping("/{id}")
-	public ResponseEntity<Activity> getActivityById(@PathVariable(value = "id") Long activityId)
-			throws ConfigDataResourceNotFoundException {
-		Activity activity = activityService.getActivityById(activityId);
-		return ResponseEntity.ok().body(activity);
-	}
+
+    // Get activity by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Activity> getActivityById(@PathVariable(value = "id") Long activityId)
+            throws ConfigDataResourceNotFoundException {
+        Activity activity = activityService.getActivityById(activityId);
+        return ResponseEntity.ok().body(activity);
+    }
 
 	// Update activity
 	@PutMapping("/{id}")
@@ -61,10 +64,20 @@ public class ActivityController {
 		return ResponseEntity.ok(updatedActivity);
 	}
 
+    // Update activity
+    @PutMapping("/{id}")
+    public ResponseEntity<Activity> updateActivity(@PathVariable(value = "id") int activityId,
+            @Valid @RequestBody Activity activityDetails) throws ConfigDataResourceNotFoundException {
+        Activity updatedActivity = activityService.updateActivity(activityDetails);
+        return ResponseEntity.ok(updatedActivity);
+    }
+
+  
 	// Delete activity
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Activity> deleteActivity(@PathVariable(value = "id") Long activityId) {
 		return new ResponseEntity<Activity>(activityService.deleteActivity(activityId), HttpStatus.OK);
 	}
+
 
 }

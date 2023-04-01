@@ -10,10 +10,17 @@ import com.adventurelandVillage.model.Customer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long>{
-public  List<Activity> findByChargesLessThan(float charges);
+	
+	
+   public Optional<Activity> findByDescription(String name);
+   
+   public Activity findByActivityId(Long activityId);
+	
+  public  List<Activity> findByChargesLessThan(float charges);
 	
 //  @Query("select a from Activity a join Ticket t on a.activityId=t.activities.activityId where t.customers.customerId=?1")
 //  public List<Activity> getCustomerId(Long customerId);
@@ -31,4 +38,5 @@ public List<Activity> getCustomerId( Long customerId);
   
  @Query("select count(a) from Activity a where charges = ?1")
  public int countActivitiesOfCharges(@Param("charges") float charges);
+
 }
