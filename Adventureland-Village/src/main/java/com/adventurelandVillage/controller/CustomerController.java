@@ -25,7 +25,7 @@ public class CustomerController {
 
 	@Autowired
 	public CustomerController(com.adventurelandVillage.service.CustomerService customerService) {
-		super();
+	
 		CustomerService = customerService;
 	}
 
