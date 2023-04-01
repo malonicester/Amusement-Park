@@ -1,11 +1,10 @@
 package com.adventurelandVillage.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,31 +25,27 @@ import jakarta.validation.Valid;
 @RequestMapping("/activities")
 public class ActivityController {
 
-    @Autowired
-    private ActivityService activityService;
-    
-    @GetMapping("/")
-    public String home() {
-        return "Welcome to the activity application!";
-    }
-    
-    // Create activity
-    @PostMapping("")
-    public Activity createActivity(@Valid @RequestBody Activity activity) {
-    	return activityService.addActivity(activity);
-    }
 
-    // Get all activities
-    @GetMapping("")
-    public List<Activity> getAllActivities() {
-        return activityService.getAllActivities();
-    }
+	@Autowired
+	private ActivityService activityService;
 
-    // Get activities by charges
-    @GetMapping("/bycharges/{charges}")
-    public List<Activity> getActivitiesByCharges(@PathVariable(value = "charges") float charges) {
-    	return activityService.getActivitiesByCharges(charges);
-    }
+	// Create activity
+	@PostMapping("")
+	public Activity createActivity(@Valid @RequestBody Activity activity) {
+		return activityService.addActivity(activity);
+	}
+
+	// Get all activities
+	@GetMapping("")
+	public List<Activity> getAllActivities() {
+		return activityService.getAllActivities();
+	}
+
+	// Get activities by charges
+	@GetMapping("/bycharges/{charges}")
+	public List<Activity> getActivitiesByCharges(@PathVariable(value = "charges") float charges) {
+		return activityService.getActivitiesByCharges(charges);
+	}
 
     // Get activity by ID
     @GetMapping("/{id}")
@@ -60,6 +55,13 @@ public class ActivityController {
         return ResponseEntity.ok().body(activity);
     }
 
+	// Update activity
+	@PutMapping("/{id}")
+	public ResponseEntity<Activity> updateActivity(@PathVariable(value = "id") int activityId,
+			@Valid @RequestBody Activity activityDetails) throws ConfigDataResourceNotFoundException {
+		Activity updatedActivity = activityService.updateActivity(activityDetails);
+		return ResponseEntity.ok(updatedActivity);
+	}
 
     // Update activity
     @PutMapping("/{id}")
@@ -69,14 +71,12 @@ public class ActivityController {
         return ResponseEntity.ok(updatedActivity);
     }
 
-    // Delete activity
-    @DeleteMapping("/{id}")
-    public Map<String, Boolean> deleteActivity(@PathVariable(value = "id") Long activityId)
-            throws ConfigDataResourceNotFoundException {
-        activityService.deleteActivity(activityId);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return response;
-    }
+  
+	// Delete activity
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Activity> deleteActivity(@PathVariable(value = "id") Long activityId) {
+		return new ResponseEntity<Activity>(activityService.deleteActivity(activityId), HttpStatus.OK);
+	}
+
 
 }

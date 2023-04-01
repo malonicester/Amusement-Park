@@ -14,23 +14,21 @@ import com.adventurelandVillage.service.LoginService;
 
 @RestController
 public class LoginController {
-@Autowired
-private LoginService loginService;
-@PostMapping("/login")
-public ResponseEntity<String> logInCustomer(@RequestBody LoginDTO dto) throws LoginException {
-	
-	String result = loginService.logIntoAccount(dto);
-	
+	@Autowired
+	private LoginService loginService;
 
-	
-	return new ResponseEntity<String>(result,HttpStatus.OK );
-	
-	
-}
+	@PostMapping("/login")
+	public ResponseEntity<String> logInCustomer(@RequestBody LoginDTO dto) throws LoginException {
 
-@PostMapping("/logout")
-public String logoutCustomer(@RequestParam(required = false) String key) throws LoginException {
-	return loginService.logOutFromAccount(key);
-	
-}
+		String result = loginService.logInAsUser(dto);
+
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+
+	}
+
+	@PostMapping("/logout")
+	public String logoutCustomer(@RequestParam(required = false) String key) throws LoginException {
+		return loginService.logOutFromAccount(key);
+
+	}
 }

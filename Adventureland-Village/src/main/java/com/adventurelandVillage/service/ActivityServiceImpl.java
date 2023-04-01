@@ -20,7 +20,6 @@ public class ActivityServiceImpl implements ActivityService {
 
 	@Override
 	public Activity addActivity(Activity activity) {
-		// TODO Auto-generated method stub
 		return activityRepository.save(activity);
 	}
 
@@ -33,7 +32,7 @@ public class ActivityServiceImpl implements ActivityService {
 		}else {
 			throw new ActivityException("No any Activity found by activityId : "+activity.getActivityId());
 		}
-	}
+
 	
 	@Override
 	public String deleteActivity(Long activityId) throws CustomerException {
@@ -69,6 +68,11 @@ public class ActivityServiceImpl implements ActivityService {
 			return activityRepository.countActivitiesOfCharges(charges);
 		
 		}
+		return activityRepository.findByChargesLessThan(charges);
+	}
+
+	public Activity getActivityById(Long Activityid) {
+		return activityRepository.findById(Activityid).orElse(null);
 	}
 	
 	//-=-=-==-=-=-=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=--=-=-=-=-=-=-=-=-//
@@ -84,8 +88,15 @@ public class ActivityServiceImpl implements ActivityService {
 		return activityRepository.findById(Activityid).orElse(null);
 	}
 
-	
 
-	//-=-=-==-=-=-=-=-=-=-=-=-==-=-=-=-=-=-==-=-=-=-=--=-=-=-=-=-=-=-=-//
+	public Activity deleteActivity(Long activityId) throws ActivityException {
+		Optional<Activity> optional = activityRepository.findById(activityId);
+		if (optional.isPresent()) {
+			Activity activity = optional.get();
+			activityRepository.delete(activity);
+			return activity;
+		}
+		throw new ActivityException("No Activity Found with id " + activityId);
+	}
 
 }
