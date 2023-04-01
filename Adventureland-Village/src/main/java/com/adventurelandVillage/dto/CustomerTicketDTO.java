@@ -20,6 +20,6 @@ public class CustomerTicketDTO {
 
 	private List<Ticket> tickets;
 
-	private Integer totalAmount;
+	private float totalAmount;
 
 }

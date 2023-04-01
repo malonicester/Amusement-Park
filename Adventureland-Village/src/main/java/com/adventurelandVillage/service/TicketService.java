@@ -13,12 +13,12 @@ public interface TicketService {
 
 	public Ticket insertTicketBooking(Ticket ticket, Long activityId, String uuid) throws ActivityException, TicketException, LoginException;
 
-	public Ticket updateTicketBooking(Long ticketId, Long activityId) throws ActivityException, TicketException, LoginException;
+	public Ticket updateTicketBooking(Long ticketId, Long activityId, String uuid) throws ActivityException, TicketException, LoginException;
 
-	public Ticket deleteTicketBooking(Long ticketId) throws TicketException, LoginException;
+	public String deleteTicketBooking(Long ticketId,Long customerId, String uuid) throws TicketException, LoginException;
 
-	public List<Ticket> viewAllTicketCustomer() throws TicketException, CustomerException, LoginException;
+	public List<Ticket> viewAllTicketCustomer(Long customerId, String uuid) throws TicketException, CustomerException, LoginException;
 
-	public CustomerTicketDTO calculateBill() throws TicketException, LoginException, CustomerException;
+	public CustomerTicketDTO calculateBill(Long customerId, String uuid) throws TicketException, LoginException, CustomerException;
 
 }
