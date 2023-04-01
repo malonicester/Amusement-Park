@@ -28,16 +28,26 @@ public class ActivityServiceImpl implements ActivityService {
 
 	@Override
 	public List<Activity> getActivitiesByCharges(float charges) {
-		return activityRepository.findByChargesLessThan(charges);
-	}
-
-	public Activity getActivityById(Long Activityid) {
-		return activityRepository.findById(Activityid).orElse(null);
+		List<Activity> alist=activityRepository.findByChargesLessThan(charges);
+		if(alist.isEmpty()) {
+			throw new ActivityException("No activity found.");
+		}else {	
+			return alist;
+		}
 	}
 
 	@Override
-	public Activity updateActivity(Activity activity) {
-		return activityRepository.save(activity);
+	public Activity getActivityById(Long Activityid) {
+		return activityRepository.findById(Activityid).orElseThrow(()->new ActivityException("No Activity Foundw with id " + Activityid));
+	}
+
+	public Activity updateActivity(Activity activity) throws ActivityException{
+		Optional<Activity> actvty=activityRepository.findById(activity.getActivityId());
+		if(actvty.isPresent()) {
+			return activityRepository.save(activity);			
+		}else {
+			throw new ActivityException("No any Activity found by activityId : "+activity.getActivityId());
+		}
 	}
 
 	public Activity deleteActivity(Long activityId) throws ActivityException {
@@ -50,8 +60,14 @@ public class ActivityServiceImpl implements ActivityService {
 		throw new ActivityException("No Activity Found with id " + activityId);
 	}
 
-	public Activity getActivityById(long activityId) {
-		return null;
+	@Override
+	public int countActivitiesOfCharges(float charges) {
+		int actCount=0;		  
+	  	if(actCount==0) {
+			throw new ActivityException("No activity found.");
+		}else {	
+			return activityRepository.countActivitiesOfCharges(charges);
+		
+		}
 	}
-
 }
