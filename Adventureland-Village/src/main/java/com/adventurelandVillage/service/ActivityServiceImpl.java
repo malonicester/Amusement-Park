@@ -30,24 +30,8 @@ public class ActivityServiceImpl implements ActivityService {
 		}
 
 	}	
+	
 	@Override
-	public List<Activity> getActivitiesByCharges(float charges) {
-		List<Activity> alist=activityRepository.findByChargesLessThan(charges);
-		if(alist.isEmpty()) {
-			throw new ActivityException("No activity found.");
-		}else {	
-			return alist;
-		}
-	}
-	@Override
-	public Activity getActivityById(Long Activityid) {
-		return activityRepository.findById(Activityid).orElseThrow(()->new ActivityException("No Activity Foundw with id " + Activityid));
-	}
-	@Override
-	public List<Activity> getAllActivities() {
-		// TODO Auto-generated method stub
-		return activityRepository.findAll();
-	}
 	public Activity deleteActivity(Long activityId) throws ActivityException {
 		Optional<Activity> optional = activityRepository.findById(activityId);
 		if (optional.isPresent()) {
@@ -57,7 +41,17 @@ public class ActivityServiceImpl implements ActivityService {
 		}
 		throw new ActivityException("No Activity Found with id " + activityId);
 	}
-
+	
+	@Override
+	public List<Activity> getActivitiesByCharges(float charges) {
+		List<Activity> alist=activityRepository.findByChargesLessThan(charges);
+		if(alist.isEmpty()) {
+			throw new ActivityException("No activity found.");
+		}else {	
+			return alist;
+		}
+	}
+	
 	@Override
 	public int countActivitiesOfCharges(float charges) {
 		int actCount=0;		  
@@ -68,5 +62,21 @@ public class ActivityServiceImpl implements ActivityService {
 		
 		}
 	}
+	
+//-=-=--=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=//	
+
+	@Override
+	public List<Activity> getAllActivities() {
+		// TODO Auto-generated method stub
+		return activityRepository.findAll();
+	}
+
+	@Override
+	public Activity getActivityById(Long Activityid) {
+		return activityRepository.findById(Activityid).orElseThrow(()->new ActivityException("No Activity Foundw with id " + Activityid));
+	}
+	
+	
+	
 
 }

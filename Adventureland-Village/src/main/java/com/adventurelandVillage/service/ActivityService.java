@@ -9,16 +9,18 @@ public interface ActivityService {
 
 	Activity addActivity(Activity activity);
 
-	public List<Activity> getAllActivities();
-
+	public Activity updateActivity(Activity activity)throws ActivityException;
+	
+	public Activity deleteActivity(Long activityId) throws ActivityException;
+	
 	public List<Activity> getActivitiesByCharges(float charges);
 
-	public Activity getActivityById(Long Activityid);
-
-	public Activity updateActivity(Activity activity)throws ActivityException;
-
-	public Activity deleteActivity(Long activityId) throws ActivityException;
-
 	public int countActivitiesOfCharges(float charges);
+
+	//-=-=-==-=-=-=-====-==-Extra=-=-===-=======-=//
+	
+	public List<Activity> getAllActivities();
+	
+	public Activity getActivityById(Long Activityid);
 
 }
