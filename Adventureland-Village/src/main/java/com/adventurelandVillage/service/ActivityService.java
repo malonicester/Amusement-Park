@@ -7,11 +7,11 @@ import com.adventurelandVillage.model.Activity;
 
 public interface ActivityService {
 
-	Activity addActivity(Activity activity);
+	Activity addActivity(Activity activity,String uuid);
 
-	public Activity updateActivity(Activity activity)throws ActivityException;
+	public Activity updateActivity(Activity activity,String uuid) throws ActivityException;
 	
-	public Activity deleteActivity(Long activityId) throws ActivityException;
+	public Activity deleteActivity(Long activityId, String uuid) throws ActivityException;
 	
 	public List<Activity> getActivitiesByCharges(float charges);
 
