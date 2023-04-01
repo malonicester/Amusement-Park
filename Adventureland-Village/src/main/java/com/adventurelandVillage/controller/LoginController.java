@@ -29,6 +29,9 @@ public class LoginController {
 	@PostMapping("/logout")
 	public String logoutCustomer(@RequestParam(required = false) String key) throws LoginException {
 		return loginService.logOutFromAccount(key);
-
+	}
+	@PostMapping("/login/admin")
+	public ResponseEntity<String> loginAdminHandler(@RequestBody LoginDTO dto){
+		return new ResponseEntity<String>(loginService.logIntoAccount(dto),HttpStatus.OK);
 	}
 }

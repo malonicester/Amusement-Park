@@ -2,6 +2,7 @@ package com.adventurelandVillage.exception;
 
 import java.time.LocalDateTime;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -89,5 +90,11 @@ public class GlobalExceptionHandler {
 		MyErrorDetails err = new MyErrorDetails(LocalDateTime.now(), exception.getMessage(), req.getDescription(false));
 		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
 
+	}
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<MyErrorDetails> sqlExceptionHandler(DataIntegrityViolationException exception, WebRequest req) {
+		MyErrorDetails err = new MyErrorDetails(LocalDateTime.now(), exception.getMessage(), req.getDescription(false));
+		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+		
 	}
 }

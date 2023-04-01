@@ -1,5 +1,6 @@
 package com.adventurelandVillage.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.adventurelandVillage.model.Activity;
@@ -14,5 +15,9 @@ import lombok.NoArgsConstructor;
 public class CustomerActivityDTO {
 	private Long customerId;
 	private String customerName;
-	private List<Activity> activities;
+	private List<Activity> activities = new ArrayList<>();
+	float charges;
+
+	public CustomerActivityDTO(Long customerId2, String userName, List<Activity> activityByCustomer) {
+	}
 }
