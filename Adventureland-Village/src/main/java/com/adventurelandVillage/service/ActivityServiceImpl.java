@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adventurelandVillage.exception.ActivityException;
+import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.Activity;
 import com.adventurelandVillage.repository.ActivityRepository;
 
@@ -16,12 +17,16 @@ public class ActivityServiceImpl implements ActivityService {
 	@Autowired
 	private ActivityRepository activityRepository;
 
+	@Autowired
+	private LoginService loginService;
 	@Override
-	public Activity addActivity(Activity activity) {
+	public Activity addActivity(Activity activity,String uuid) {
+		if(!loginService.isAdmin(uuid)) throw new LoginException("Please Login as Admin");
 		return activityRepository.save(activity);
 	}	
 	@Override
-	public Activity updateActivity(Activity activity) throws ActivityException{
+	public Activity updateActivity(Activity activity,String uuid) throws ActivityException{
+		if(!loginService.isAdmin(uuid)) throw new LoginException("Please Login as Admin");
 		Optional<Activity> actvty=activityRepository.findById(activity.getActivityId());
 		if(actvty.isPresent()) {
 			return activityRepository.save(activity);			
@@ -32,7 +37,8 @@ public class ActivityServiceImpl implements ActivityService {
 	}	
 	
 	@Override
-	public Activity deleteActivity(Long activityId) throws ActivityException {
+	public Activity deleteActivity(Long activityId, String uuid) throws ActivityException {
+		if(!loginService.isAdmin(uuid)) throw new LoginException("Please Login as Admin");
 		Optional<Activity> optional = activityRepository.findById(activityId);
 		if (optional.isPresent()) {
 			Activity activity = optional.get();

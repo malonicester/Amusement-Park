@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adventurelandVillage.model.Activity;
-import com.adventurelandVillage.repository.ActivityRepository;
 import com.adventurelandVillage.service.ActivityService;
 
 import jakarta.validation.Valid;
@@ -30,8 +30,8 @@ public class ActivityController {
 
 	// Create activity
 	@PostMapping("")
-	public Activity createActivity(@Valid @RequestBody Activity activity) {
-		return activityService.addActivity(activity);
+	public Activity createActivity(@Valid @RequestBody Activity activity,@RequestParam String uuid) {
+		return activityService.addActivity(activity,uuid);
 	}
 
 	// Get all activities
@@ -57,15 +57,15 @@ public class ActivityController {
 	// Update activity
 	@PutMapping("/{id}")
 	public ResponseEntity<Activity> updateActivity(@PathVariable(value = "id") Long activityId,
-			@Valid @RequestBody Activity activityDetails) throws ConfigDataResourceNotFoundException {
-		Activity updatedActivity = activityService.updateActivity(activityDetails);
+			@Valid @RequestBody Activity activityDetails,@RequestParam String uuid) throws ConfigDataResourceNotFoundException {
+		Activity updatedActivity = activityService.updateActivity(activityDetails,uuid);
 		return ResponseEntity.ok(updatedActivity);
 	}
 
 	// Delete activity
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Activity> deleteActivity(@PathVariable(value = "id") Long activityId) {
-		return new ResponseEntity<Activity>(activityService.deleteActivity(activityId), HttpStatus.OK);
+	public ResponseEntity<Activity> deleteActivity(@PathVariable(value = "id") Long activityId,@RequestParam String uuid) {
+		return new ResponseEntity<Activity>(activityService.deleteActivity(activityId,uuid), HttpStatus.OK);
 	}
 
 }
