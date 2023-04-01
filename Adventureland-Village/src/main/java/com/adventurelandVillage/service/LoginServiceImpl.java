@@ -6,11 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.adventurelandVillage.exception.AdminException;
 import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.Admin;
 import com.adventurelandVillage.model.CurrentUserSession;
 import com.adventurelandVillage.model.Customer;
 import com.adventurelandVillage.model.LoginDTO;
+import com.adventurelandVillage.model.Role;
 import com.adventurelandVillage.repository.AdminRepo;
 import com.adventurelandVillage.repository.CustomerRepository;
 import com.adventurelandVillage.repository.SessionRepo;
@@ -42,7 +44,7 @@ public class LoginServiceImpl implements LoginService {
 		if (existingAdmin.getPassword().equals(dto.getPassword())) {
 			String key = RandomString.make(6);
 			CurrentUserSession currentUserSession = new CurrentUserSession(existingAdmin.getAdminId(), key,
-					LocalDateTime.now());
+					LocalDateTime.now(), dto.getRole());
 			sessionRepo.save(currentUserSession);
 			return currentUserSession.toString();
 		} else {
@@ -74,7 +76,7 @@ public class LoginServiceImpl implements LoginService {
 		if (customer.getPassword().equals(loginDTO.getPassword())) {
 			String key = RandomString.make(6);
 			CurrentUserSession currentUserSession = new CurrentUserSession(customer.getCustomerId(), key,
-					LocalDateTime.now());
+					LocalDateTime.now(), loginDTO.getRole());
 			CurrentUserSession session = sessionRepo.save(currentUserSession);
 			return session.toString();
 		}
@@ -90,12 +92,18 @@ public class LoginServiceImpl implements LoginService {
 		sessionRepo.delete(currentUserSession);
 		return "Logged Out!";
 	}
+
 	@Override
 	public boolean isLoggedIn(String key) throws LoginException {
 		CurrentUserSession currentUserSession = sessionRepo.findByUuid(key);
 		if (currentUserSession == null)
 			return false;
 		return true;
+	}
+
+	@Override
+	public boolean isAdmin(String uuid) throws AdminException {
+		return sessionRepo.findByUuid(uuid).getRole().equals(Role.ADMIN);
 	}
 
 }
