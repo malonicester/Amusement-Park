@@ -22,4 +22,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 	@Query("select t.activities from Ticket t where t.customers.customerId=?1")
 	public List<Activity> getActivityByCustomer(Long customerId);
 
+	@Query("Select t.activities from Ticket t where t.dateTime between ?1 and ?2")
+	public List<Activity> getDateBetween(Long customerId,LocalDateTime fromDate,LocalDateTime toDate );
 }

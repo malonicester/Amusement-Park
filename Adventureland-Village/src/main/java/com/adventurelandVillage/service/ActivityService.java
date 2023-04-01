@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.adventurelandVillage.exception.ActivityException;
 import com.adventurelandVillage.model.Activity;
-import com.adventurelandVillage.model.Admin;
 
 public interface ActivityService {
 	
