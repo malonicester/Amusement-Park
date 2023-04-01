@@ -1,5 +1,6 @@
 package com.adventurelandVillage.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,28 +70,82 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Ticket updateTicketBooking(Long ticketId, Long activityId)
+	public Ticket updateTicketBooking(Long ticketId, Long activityId,String uuid)
 			throws ActivityException, TicketException, LoginException {
-		// TODO Auto-generated method stub
-		return null;
+		if (islogInLogout.isLoggedIn(uuid) == false) {
+			throw new LoginException("Please Login first !!!");
+		}
+
+		Ticket ticket = ticketRepo.findById(ticketId).orElseThrow(() -> new TicketException("Ticket not found..."));
+
+		Activity activity = activityRepo.findById(activityId)
+				.orElseThrow(() -> new ActivityException("Activity not found"));
+
+		ticket.setActivities(activity);
+		ticket.setDateTime(LocalDateTime.now());
+		ticketRepo.save(ticket);
+
+		return ticket;
 	}
 
 	@Override
-	public Ticket deleteTicketBooking(Long ticketId) throws TicketException, LoginException {
-		// TODO Auto-generated method stub
-		return null;
+	public String deleteTicketBooking(Long ticketId, Long customerId,String uuid) throws TicketException, LoginException {
+		// use parameter customerId to check if current session customer is same as
+		// customer from customerId
+		if (islogInLogout.isLoggedIn(uuid) == false) {
+			throw new LoginException("Please Login first !!!");
+		}
+		String res = "Failed,Please try again...";
+		Ticket ticket = ticketRepo.findById(ticketId).orElseThrow(() -> new TicketException("Ticket ID not found..."));
+
+		try {
+			ticketRepo.delete(ticket);
+			res = "Ticket deleted successfully";
+		} catch (Exception e) {
+			return res;
+		}
+
+		return res;
 	}
 
 	@Override
-	public List<Ticket> viewAllTicketCustomer() throws TicketException, CustomerException, LoginException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Ticket> viewAllTicketCustomer(Long customerId,String uuid)
+			throws TicketException, CustomerException, LoginException {
+		// use parameter customerId to check if current session customer is same as
+		// customer from customerId
+		if (islogInLogout.isLoggedIn(uuid) == false) {
+			throw new LoginException("Please Login first !!!");
+		}
+		Customer customer = customerRepo.findById(customerId)
+				.orElseThrow(() -> new CustomerException("Customer not found.."));
+
+		List<Ticket> listOfTickets = customer.getTickets();
+
+		return listOfTickets;
 	}
 
 	@Override
-	public CustomerTicketDTO calculateBill() throws TicketException, LoginException, CustomerException {
-		// TODO Auto-generated method stub
-		return null;
+	public CustomerTicketDTO calculateBill(Long customerId,String uuid) throws TicketException, LoginException, CustomerException {
+		// first find if customer from current session is same as customerId
+		if (islogInLogout.isLoggedIn(uuid) == false) {
+			throw new LoginException("Please Login first !!!");
+		}
+		float charges = 0;
+		Customer customer = customerRepo.findById(customerId)
+				.orElseThrow(() -> new CustomerException("Customer not found.."));
+
+		List<Ticket> ticketList = customer.getTickets();
+
+		for (Ticket t : ticketList) {
+			charges += t.getActivities().getCharges();
+		}
+		CustomerTicketDTO customerTicketDTO = new CustomerTicketDTO();
+
+		customerTicketDTO.setCustomer(customer);
+		customerTicketDTO.setTickets(ticketList);
+		customerTicketDTO.setTotalAmount(charges);
+
+		return customerTicketDTO;
 	}
 
 }
