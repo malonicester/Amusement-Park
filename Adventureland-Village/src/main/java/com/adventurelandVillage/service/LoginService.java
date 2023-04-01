@@ -12,5 +12,6 @@ public interface LoginService {
 	public String logInAsUser(LoginDTO loginDTO) throws LoginException;
 
 	public boolean isLoggedIn(String key) throws LoginException;
+
 	public boolean isAdmin(String uuid) throws AdminException;
 }

@@ -1,5 +1,8 @@
 package com.adventurelandVillage.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Email;
@@ -23,17 +26,17 @@ public abstract class AbstractUser {
 	@Size(min = 5)
 	private String userName;
 
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",message = "Password must be of atleast 8 characters, contains at least one uppercase, one lowercase,a special character and a number in it")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	@NotNull
 	@NotBlank
 	@NotEmpty
-	//@Min(4)
 	private String address;
 
 	@Column(unique = true)
-	@Pattern(regexp = "^[6-9]\\d{9}$")
+	@Pattern(regexp = "^[6-9]\\d{9}$",message= "Mobile Number Should be of 10 digits and starts with 6-9")
 	private String mobileNumber;
 
 	@Column(unique = true)

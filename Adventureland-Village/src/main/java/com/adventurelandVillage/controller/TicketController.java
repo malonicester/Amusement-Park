@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adventurelandVillage.dto.CustomerActivityDTO;
 import com.adventurelandVillage.dto.CustomerTicketDTO;
 import com.adventurelandVillage.model.Ticket;
 import com.adventurelandVillage.service.TicketService;
@@ -28,32 +29,43 @@ public class TicketController {
 			@RequestParam String uuid) {
 		return new ResponseEntity<Ticket>(ticketSerivce.insertTicketBooking(ticket, activityId, uuid), HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/tickets/update/{ticketId}/{activityId}")
-	public ResponseEntity<?> updateTicketHandler(@PathVariable("ticketId") Long ticketId, @PathVariable("activityId") Long activityId,@RequestParam String uuid){
-		
-		Ticket ticket=this.ticketSerivce.updateTicketBooking(ticketId, activityId, uuid);
-		
+	public ResponseEntity<?> updateTicketHandler(@PathVariable("ticketId") Long ticketId,
+			@PathVariable("activityId") Long activityId, @RequestParam String uuid) {
+
+		Ticket ticket = this.ticketSerivce.updateTicketBooking(ticketId, activityId, uuid);
+
 		return ResponseEntity.ok(ticket);
-		
+
 	}
-	
+
 	@DeleteMapping("/tickets/delete")
-	public ResponseEntity<?> deleteTicketHandler(@RequestParam(value = "ticketId",required = true) Long ticketId,@RequestParam(value = "customerId",required = true) Long customerId,@RequestParam String uuid){
-		String message=this.ticketSerivce.deleteTicketBooking(ticketId, customerId, uuid);
-		
+	public ResponseEntity<?> deleteTicketHandler(@RequestParam(value = "ticketId", required = true) Long ticketId,
+			@RequestParam(value = "customerId", required = true) Long customerId, @RequestParam String uuid) {
+		String message = this.ticketSerivce.deleteTicketBooking(ticketId, customerId, uuid);
+
 		return ResponseEntity.ok(message);
 	}
-	
+
 	@GetMapping("/tickets/getAllTickets")
-	public ResponseEntity<?> getAllTicketsHandler(@RequestParam(value = "customerId",required = true) Long customerId,@RequestParam String uuid){
-		List<Ticket> tickets=this.ticketSerivce.viewAllTicketCustomer(customerId, uuid);
+	public ResponseEntity<?> getAllTicketsHandler(@RequestParam(value = "customerId", required = true) Long customerId,
+			@RequestParam String uuid) {
+		List<Ticket> tickets = this.ticketSerivce.viewAllTicketCustomer(customerId, uuid);
 		return ResponseEntity.ok(tickets);
 	}
-	
+
 	@GetMapping("/tickets/bill")
-	public ResponseEntity<?> calculateBillHandler(@RequestParam(value = "customerId",required = true) Long customerId,@RequestParam String uuid){
-		CustomerTicketDTO customerTicketDto=this.ticketSerivce.calculateBill(customerId, uuid);
+	public ResponseEntity<?> calculateBillHandler(@RequestParam(value = "customerId", required = true) Long customerId,
+			@RequestParam String uuid) {
+		CustomerTicketDTO customerTicketDto = this.ticketSerivce.calculateBill(customerId, uuid);
 		return ResponseEntity.ok(customerTicketDto);
+	}
+
+	@PostMapping("/tickets/multiParkCombo/{id}")
+	public ResponseEntity<CustomerActivityDTO> bookPackageHandler(@PathVariable("id") Long activityId,
+			@RequestParam String uuid) {
+		return new ResponseEntity<CustomerActivityDTO>(ticketSerivce.bookMultiParkComboWithFreeBuffet(activityId, uuid),
+				HttpStatus.OK);
 	}
 }
