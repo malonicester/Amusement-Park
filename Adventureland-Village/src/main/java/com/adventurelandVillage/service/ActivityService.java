@@ -15,7 +15,7 @@ public interface ActivityService {
 
 	public Activity getActivityById(Long Activityid);
 
-	public Activity updateActivity(Activity activity);
+	public Activity updateActivity(Activity activity)throws ActivityException;
 
 	public Activity deleteActivity(Long activityId) throws ActivityException;
 
