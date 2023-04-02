@@ -12,7 +12,7 @@ import com.adventurelandVillage.model.Ticket;
 
 public interface TicketService {
 
-	public Ticket insertTicketBooking(Ticket ticket, Long activityId, String uuid)
+	public Ticket insertTicketBooking(Long  customerId, Long activityId, String uuid)
 			throws ActivityException, TicketException, LoginException;
 
 	public Ticket updateTicketBooking(Long ticketId, Long activityId, String uuid)

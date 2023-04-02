@@ -42,7 +42,7 @@ public class TicketServiceImpl implements TicketService {
 	private TicketRepository ticketRepo;
 
 	@Override
-	public Ticket insertTicketBooking(Ticket ticket, Long activityId, String uuid)
+	public Ticket insertTicketBooking(Long customerId, Long activityId, String uuid)
 			throws ActivityException, TicketException, LoginException {
 		if (islogInLogout.isLoggedIn(uuid) == false) {
 			throw new LoginException("Please Login First !!!");
@@ -51,12 +51,12 @@ public class TicketServiceImpl implements TicketService {
 		Optional<Activity> optinalActivity = activityRepo.findById(activityId);
 
 		if (optinalActivity.isPresent()) {
-			CurrentUserSession currUser = sessionRepo.findByUuid(uuid);
+//			CurrentUserSession currUser = sessionRepo.findByUuid(uuid);
 
-			Optional<Customer> optionalCustomer = customerRepo.findById(currUser.getUserId());
+//			Optional<Customer> optionalCustomer = customerRepo.findById(currUser.getUserId());
 
-			Customer customer = optionalCustomer.get();
-
+			Customer customer = customerRepo.findById(customerId).get();
+			Ticket ticket = new Ticket();
 			ticket.setCustomers(customer);
 
 			customer.getTickets().add(ticket);

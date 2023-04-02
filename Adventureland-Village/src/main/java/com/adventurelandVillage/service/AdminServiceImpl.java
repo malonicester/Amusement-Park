@@ -61,8 +61,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin deleteAdmin(Long adminId,String uuid) throws AdminException {
-		if(!loginSerivce.isAdmin(uuid)) {
+	public Admin deleteAdmin(Long adminId, String uuid) throws AdminException {
+		if (!loginSerivce.isAdmin(uuid)) {
 			throw new AdminException("You are not an admin");
 		}
 		Admin admin = adminRepo.findById(adminId).orElseThrow(() -> new AdminException("not found"));
@@ -94,13 +94,10 @@ public class AdminServiceImpl implements AdminService {
 			throw new LoginException("Please Login As admin for the access");
 		List<CustomerActivityDTO> customerActivityDTO = customerRepository.findAll().stream()
 				.map((e) -> new CustomerActivityDTO(e.getCustomerId(), e.getUserName(),
-						ticketRepository.getActivityByCustomer(e.getCustomerId()),0))
+						ticketRepository.getActivityByCustomer(e.getCustomerId()), 0))
 				.collect(Collectors.toList()).stream().filter((e) -> !e.getActivities().isEmpty())
 				.collect(Collectors.toList());
 		return customerActivityDTO;
-
-//		if (customerActivityDTO.isEmpty())
-//			throw new ActivityException("No Customers Found");
 	}
 
 	@Override
