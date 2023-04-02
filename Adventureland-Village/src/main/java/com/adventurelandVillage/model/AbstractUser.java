@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,11 +21,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class AbstractUser {
 
-	@Column(unique = true)
 	@Size(min = 5)
 	private String userName;
 
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",message = "Password must be of atleast 8 characters, contains at least one uppercase, one lowercase,a special character and a number in it")
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",message = "{password.invalid}")
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
@@ -40,6 +38,6 @@ public abstract class AbstractUser {
 	private String mobileNumber;
 
 	@Column(unique = true)
-	@Email
+	@Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$",message = "{email.invalid}")
 	private String email;
 }
