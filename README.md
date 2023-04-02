@@ -32,10 +32,10 @@ Functionalities Of Admin :
 <img src="./Adventureland-Village/Images/new.png"/>
 
 # Entity Schema
-<img src="./Adventureland-Village/Images/customer.PNG"/>
-<img src="./Adventureland-Village/Images/admin.PNG"/>
-<img src="./Adventureland-Village/Images/ticket.PNG"/>
-<img src="./Adventureland-Village/Images/activity.PNG"/>
+<img  width="60%" src="./Adventureland-Village/Images/customer.PNG"/>
+<img width="60%" src="./Adventureland-Village/Images/admin.PNG"/>
+<img width="60%" src="./Adventureland-Village/Images/ticket.PNG"/>
+<img  width="60%" src="./Adventureland-Village/Images/activity.PNG"/>
  
 
 
