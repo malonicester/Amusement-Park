@@ -41,8 +41,8 @@ public class AdminController {
 	}
 
 	@DeleteMapping("admin/{adminId}")
-	public ResponseEntity<Admin> deletadmin(@PathVariable Long adminId) {
-		Admin admin = adminService.deleteAdmin(adminId);
+	public ResponseEntity<Admin> deletadmin(@PathVariable Long adminId,@RequestParam String uuid) {
+		Admin admin = adminService.deleteAdmin(adminId,uuid);
 		return new ResponseEntity<Admin>(admin, HttpStatus.OK);
 	}
 
