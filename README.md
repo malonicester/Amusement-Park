@@ -36,7 +36,7 @@ Functionalities Of Admin :
  
 
 
-<h2>API End Point <a href="http://localhost:8082/swagger-ui.html">http://localhost:8082/swagger-ui.html</a></h2>
+<h2>API End Point <a href="http://localhost:8082/swagger-ui/index.html#/">http://localhost:8082/swagger-ui/index.html#/</a></h2>
 <h2>Tech Stack</h2>
 <ul>
   <li>Java</li>
