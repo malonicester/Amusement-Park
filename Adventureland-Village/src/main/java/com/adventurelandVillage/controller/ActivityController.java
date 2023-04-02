@@ -1,6 +1,7 @@
 package com.adventurelandVillage.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
@@ -8,9 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,10 +56,10 @@ public class ActivityController {
 	}
 
 	// Update activity
-	@PutMapping("/{id}")
+	@PatchMapping("/{id}")
 	public ResponseEntity<Activity> updateActivity(@PathVariable(value = "id") Long activityId,
-			@Valid @RequestBody Activity activityDetails,@RequestParam String uuid) throws ConfigDataResourceNotFoundException {
-		Activity updatedActivity = activityService.updateActivity(activityDetails,uuid);
+			@Valid @RequestBody Map<String,Object> fields,@RequestParam String uuid) throws ConfigDataResourceNotFoundException {
+		Activity updatedActivity = activityService.updateActivity(activityId,fields,uuid);
 		return ResponseEntity.ok(updatedActivity);
 	}
 
