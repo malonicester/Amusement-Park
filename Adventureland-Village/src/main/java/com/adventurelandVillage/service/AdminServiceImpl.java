@@ -61,7 +61,10 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin deleteAdmin(Long adminId) throws AdminException {
+	public Admin deleteAdmin(Long adminId,String uuid) throws AdminException {
+		if(!loginSerivce.isAdmin(uuid)) {
+			throw new AdminException("You are not an admin");
+		}
 		Admin admin = adminRepo.findById(adminId).orElseThrow(() -> new AdminException("not found"));
 		adminRepo.delete(admin);
 		return admin;

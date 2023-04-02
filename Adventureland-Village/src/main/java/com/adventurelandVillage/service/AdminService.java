@@ -17,7 +17,7 @@ public interface AdminService {
 
 	public Admin upAdmin(String key, Map<String, Object> fields) throws LoginException, AdminException;
 
-	public Admin deleteAdmin(Long adminId);
+	public Admin deleteAdmin(Long adminId,String uuid);
 
 	public List<Activity> getAllActivitiesByCustomer(Long customerId);
 
