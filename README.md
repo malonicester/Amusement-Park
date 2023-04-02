@@ -31,6 +31,14 @@ Functionalities Of Admin :
  # ER Diagram
 <img src="./Adventureland-Village/Images/new.png"/>
 
+# Entity Schema
+<img src="./Adventureland-Village/Images/customer.PNG"/>
+<img src="./Adventureland-Village/Images/admin.PNG"/>
+<img src="./Adventureland-Village/Images/ticket.PNG"/>
+<img src="./Adventureland-Village/Images/activity.PNG"/>
+ 
+
+
 <h2>API End Point <a href="http://localhost:8082/swagger-ui.html">http://localhost:8082/swagger-ui.html</a></h2>
 <h2>Tech Stack</h2>
 <ul>
@@ -42,6 +50,7 @@ Functionalities Of Admin :
   <li>Hibernate</li> 
   <li>Maven</li>
 </ul>
+
 
  Contributors:-
  
