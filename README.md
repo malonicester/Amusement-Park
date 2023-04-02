@@ -13,9 +13,6 @@ Functionalities Of Admin :
     - Register   
     - Login
     - Update Profile
-    - Add Different Slots
-    - Add Different Activity
-    - Connect slots with activity
     - Remove Activity
     - Remove Customer
     
