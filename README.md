@@ -28,7 +28,7 @@ Functionalities Of Admin :
     - Update Ticket Details
     - Remove Ticket
     
-    # ER Diagram
+ # ER Diagram
 <img src="./Adventureland-Village/Images/new.png"/>
 
 <h2>API End Point <a href="http://localhost:8082/swagger-ui.html">http://localhost:8082/swagger-ui.html</a></h2>
