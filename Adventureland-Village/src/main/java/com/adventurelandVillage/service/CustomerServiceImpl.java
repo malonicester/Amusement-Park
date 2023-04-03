@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.adventurelandVillage.exception.CustomerException;
 import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.Customer;
+import com.adventurelandVillage.model.LoginDTO;
 import com.adventurelandVillage.repository.CustomerRepository;
 @Service
 public class CustomerServiceImpl implements CustomerService{
@@ -83,10 +84,10 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	public Customer validateCustomer(String username, String password,String key) throws CustomerException , LoginException{
+	public Customer validateCustomer(String key,LoginDTO loginDto) throws CustomerException , LoginException{
 		Boolean flag= loginService.isLoggedIn(key);
 		if(flag) {
-			Customer cst=customerRepository.findByUserNameAndPassword(username, password);
+			Customer cst=customerRepository.findByMobileNumberAndPassword(loginDto.getUserName(), loginDto.getPassword());
 			if(cst!=null) {
 				return cst;
 			}

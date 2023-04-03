@@ -11,7 +11,7 @@ import com.adventurelandVillage.model.Ticket;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long>{      
-	public Customer findByUserNameAndPassword(String userName,String password);
+	public Customer findByMobileNumberAndPassword(String userName,String password);
 
 	public Customer findByMobileNumber(String mobileNumber);
 
