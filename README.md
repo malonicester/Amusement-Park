@@ -1,5 +1,5 @@
 # AdventureLand Village
-<img src="./Adventureland-Village/Images/AdventureLand_logo.PNG" width="70%"/>
+<img src="https://github.com/malonicester/stupendous-afterthought-9911/blob/main/Adventureland-Village/Images/amusement-park-logo.png?raw=true" width="90%"/>
 <p>AdventureLand Village is an amusement park  that features various attractions, such as rides and games, as well as other events for entertainment purposes. A theme park is a type of amusement park that bases its structures and attractions around a central theme, often featuring multiple areas with different themes.</p>
 
 
