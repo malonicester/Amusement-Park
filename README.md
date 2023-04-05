@@ -22,7 +22,7 @@ The application is built for 2 types of users :
   - Add Customer
   - Update Customer Details
   - Delete Customer(Id)
-  - View Customer by Id and All List
+  - View Customer by Id and Get All List
   - Validate Customer
     
 # Functionalities Of Customer :
