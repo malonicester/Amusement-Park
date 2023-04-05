@@ -1,29 +1,37 @@
 # AdventureLand Village
-<img src="./Adventureland-Village/Images/AdventureLand_logo.PNG"/>
+<img src="./Adventureland-Village/Images/AdventureLand_logo.PNG" width="70%"/>
 <p>AdventureLand Village is an amusement park  that features various attractions, such as rides and games, as well as other events for entertainment purposes. A theme park is a type of amusement park that bases its structures and attractions around a central theme, often featuring multiple areas with different themes.</p>
 
 
 The application is built for 2 types of users :
-
-    1. Admin
-    2. Customer
+<h2>  1. Admin</h2>
+<h2>  2. Customer</h2>
     
-Functionalities Of Admin :
+# Functionalities Of Admin :
 
-    - Register   
-    - Login
-    - Update Profile
-    - Remove Activity
-    - Remove Customer
+- Admin Register   
+- Admin Login
+- Admin Update Profile
+- Admin-Activity
+  - Add Activity
+  - Update Activity
+  - Delete Activity
+  - View Activity with Charges
+  - Count All Activity
+- Admin-Customer
+  - Add Customer
+  - Update Customer Details
+  - Delete Customer(Id)
+  - View Customer by Id and All List
+  - Validate Customer
     
- Functionalities Of Customer :
-
-    - Register
-    - Login
-    - Update Profile
-    - Book Ticket
-    - Update Ticket Details
-    - Remove Ticket
+# Functionalities Of Customer :
+- Customer Register
+- Customer Login
+- Customer Update Profile
+- Customer Book Ticket
+- Customer Update Ticket Details like change activities,add multiple activies,delete activities etc.
+- Cancel the Ticket
     
  # ER Diagram
 <img src="./Adventureland-Village/Images/new.png"/>
