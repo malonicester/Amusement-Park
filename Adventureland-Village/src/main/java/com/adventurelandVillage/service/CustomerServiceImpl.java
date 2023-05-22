@@ -1,102 +1,81 @@
 package com.adventurelandVillage.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.adventurelandVillage.exception.CustomerException;
 import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.Customer;
-import com.adventurelandVillage.model.LoginDTO;
+import com.adventurelandVillage.model.Role;
 import com.adventurelandVillage.repository.CustomerRepository;
+
 @Service
 public class CustomerServiceImpl implements CustomerService{
 	@Autowired
 	private CustomerRepository customerRepository;
+	
 	@Autowired
-	private LoginService loginService;
-
+	private PasswordEncoder passwordEncoder;
+	
 	@Override
 	public Customer insertCustomer(Customer customer) throws LoginException{
-			Customer cst= customerRepository.save(customer);
-			return cst;
+		    customer.setRole(Role.ROLE_USER);
+		    customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+			Customer savedCustomer = customerRepository.save(customer);
+			return savedCustomer;
 	}
 
 	@Override
-	public Customer updateCustomer(Customer customer,String key) throws CustomerException, LoginException {
-		Boolean flag= loginService.isLoggedIn(key);
-		if(flag) {
-			Optional<Customer> cstm=customerRepository.findById(customer.getCustomerId());
-			if(cstm.isPresent()) {
-				Customer cst= customerRepository.save(customer);
-				return cst;
-			}
-			else
-				throw new CustomerException("No any customer found by customerId : "+customer.getCustomerId());
+	public Customer updateCustomer(Customer updatedCustomer) throws CustomerException, LoginException {
+		
+		Authentication authentication = SecurityContextHolder
+				.getContext()
+				.getAuthentication();
+		
+		Customer customer = customerRepository.findByEmail(authentication.getName())
+							.orElseThrow(()->new CustomerException("No User Found"));
+		
+		if(updatedCustomer.getAddress()!=null) {
+			customer.
+					setAddress(updatedCustomer.getAddress());
 		}
-			else throw new LoginException("You have to login first.");
-	
+		
+		if(updatedCustomer.getMobileNumber()!=null) {
+			customer.
+				setMobileNumber(updatedCustomer.getMobileNumber());
+		}
+		
+		return customerRepository.save(customer);
 	}
 
 	@Override
-	public String deleteCustomer(Long customerId,String key) throws CustomerException, LoginException{
-		Boolean flag= loginService.isLoggedIn(key);
-		if(flag) {
-			Optional<Customer> cst=customerRepository.findById(customerId);
-			if(cst.isPresent()) {
-				customerRepository.deleteById(customerId);
-				return "Deleted successfully.";
-			}else
-				throw new CustomerException("No any customer found by customerId : "+customerId);
-		}
-		else 
-			throw new LoginException("You have to login first.");
-
+	public Customer deleteCustomer(Long customerId) throws CustomerException, LoginException {
+		Customer customer = customerRepository.findById(customerId).orElseThrow(()-> new CustomerException("No User Found with id: "+customerId));
+		customerRepository.delete(customer);
+		return customer;
 	}
 
 	@Override
-	public List<Customer> viewCustomers(String key) throws LoginException{
-		Boolean flag= loginService.isLoggedIn(key);
-		if(flag) {
-			List<Customer> clist=customerRepository.findAll();
-			if(clist.isEmpty()) {
-				throw new CustomerException("No customer found.");
-			}
-			else	
-				return clist;
-		}
-		else 
-			throw new LoginException("You have to login first.");
-
+	public List<Customer> getAllCustomers() throws LoginException {
+		
+		List<Customer> allCustomers = customerRepository.findAll();
+		
+		if(allCustomers.isEmpty()) 
+			throw new CustomerException("No Customers Found");
+		return allCustomers;
 	}
 
 	@Override
-	public Customer viewCustomer(Long customerId,String key) throws CustomerException , LoginException{
-		Boolean flag= loginService.isLoggedIn(key);
-		if(flag) {
-			return customerRepository.findById(customerId).orElseThrow(()->
-			new CustomerException("No any customer found by customerId : "+customerId));
-		}
-		else 
-			throw new LoginException("You have to login first.");
+	public Customer findCustomerById(Long customerId) throws CustomerException, LoginException {
+		return customerRepository.findById(customerId)
+						.orElseThrow(()-> new CustomerException("No Customer Found with id: "+customerId));
 	}
 
-	@Override
-	public Customer validateCustomer(String key,LoginDTO loginDto) throws CustomerException , LoginException{
-		Boolean flag= loginService.isLoggedIn(key);
-		if(flag) {
-			Customer cst=customerRepository.findByMobileNumberAndPassword(loginDto.getUserName(), loginDto.getPassword());
-			if(cst!=null) {
-				return cst;
-			}
-			else
-				throw new CustomerException("No any customer found.");
-		}
-		else 
-			throw new LoginException("You have to login first.");
-		}
-	
+
 
 }

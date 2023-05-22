@@ -1,197 +1,137 @@
 package com.adventurelandVillage.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.adventurelandVillage.dto.BookingSummaryDTO;
 import com.adventurelandVillage.dto.CustomerActivityDTO;
-import com.adventurelandVillage.dto.CustomerTicketDTO;
 import com.adventurelandVillage.exception.ActivityException;
-import com.adventurelandVillage.exception.AdminException;
 import com.adventurelandVillage.exception.CustomerException;
 import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.exception.TicketException;
 import com.adventurelandVillage.model.Activity;
-import com.adventurelandVillage.model.CurrentUserSession;
 import com.adventurelandVillage.model.Customer;
 import com.adventurelandVillage.model.Ticket;
 import com.adventurelandVillage.repository.ActivityRepository;
 import com.adventurelandVillage.repository.CustomerRepository;
-import com.adventurelandVillage.repository.SessionRepo;
 import com.adventurelandVillage.repository.TicketRepository;
 
 @Service
 public class TicketServiceImpl implements TicketService {
 
 	@Autowired
-	private LoginService islogInLogout;
+	private ActivityRepository activityRepository;
 
 	@Autowired
-	private ActivityRepository activityRepo;
+	private CustomerRepository customerRepository;
 
 	@Autowired
-	private SessionRepo sessionRepo;
-
-	@Autowired
-	private CustomerRepository customerRepo;
-
-	@Autowired
-	private TicketRepository ticketRepo;
+	private TicketRepository ticketRepository;
 
 	@Override
-	public Ticket insertTicketBooking(Long customerId, Long activityId, String uuid)
-			throws ActivityException, TicketException, LoginException {
-		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login First !!!");
-		}
+	public BookingSummaryDTO ticketBookingService(Long activityId) throws ActivityException, TicketException {
 
-		Optional<Activity> optinalActivity = activityRepo.findById(activityId);
+		Activity activity = activityRepository.findById(activityId)
+				.orElseThrow(() -> new ActivityException("No Activity Found"));
 
-		if (optinalActivity.isPresent()) {
-//			CurrentUserSession currUser = sessionRepo.findByUuid(uuid);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-//			Optional<Customer> optionalCustomer = customerRepo.findById(currUser.getUserId());
+		Customer customer = customerRepository.findByEmail(authentication.getName())
+				.orElseThrow(() -> new LoginException("Please Login First"));
 
-			Customer customer = customerRepo.findById(customerId).get();
-			Ticket ticket = new Ticket();
-			ticket.setCustomers(customer);
+		Ticket ticket = new Ticket();
 
-			customer.getTickets().add(ticket);
-
-			ticket.setActivities(optinalActivity.get());
-
-			return ticketRepo.save(ticket);
-
-		}
-
-		throw new ActivityException("Activity not found with ID " + activityId);
-
-	}
-
-	@Override
-	public Ticket updateTicketBooking(Long ticketId, Long activityId, String uuid)
-			throws ActivityException, TicketException, LoginException {
-		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login First !!!");
-		}
-
-		Ticket ticket = ticketRepo.findById(ticketId).orElseThrow(() -> new TicketException("Ticket not found..."));
-
-		Activity activity = activityRepo.findById(activityId)
-				.orElseThrow(() -> new ActivityException("Activity not found"));
+		ticket.setCustomers(customer);
 
 		ticket.setActivities(activity);
-		ticket.setDateTime(LocalDateTime.now());
-		ticketRepo.save(ticket);
 
-		return ticket;
+		customer.getTickets().add(ticket);
+
+		ticketRepository.save(ticket);
+
+		return new BookingSummaryDTO(customer.getCustomerId(), activity.getDescription(), customer.getUserName(),
+				activity.getCharges());
 	}
 
 	@Override
-	public String deleteTicketBooking(Long ticketId, Long customerId, String uuid)
-			throws TicketException, LoginException {
-		// use parameter customerId to check if current session customer is same as
-		// customer from customerId
-		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login First !!!");
-		}
-		String res = "Failed,Please try again...";
-		Ticket ticket = ticketRepo.findById(ticketId).orElseThrow(() -> new TicketException("Ticket ID not found..."));
-
-		try {
-			ticketRepo.delete(ticket);
-			res = "Ticket deleted successfully";
-		} catch (Exception e) {
-			return res;
-		}
-
-		return res;
+	public String cancelBookedTicket(Long ticketId) throws TicketException, LoginException {
+		Ticket bookedTicket = ticketRepository.findById(ticketId)
+				.orElseThrow(() -> new TicketException("This Ticket donot exist"));
+		bookedTicket.setIsCancelled(true);
+		ticketRepository.save(bookedTicket);
+		return "Your Ticket is Successfully Cancelled.";
 	}
 
 	@Override
-	public List<Ticket> viewAllTicketCustomer(Long customerId, String uuid)
+	public Set<Ticket> viewAllTicketCustomer(Long customerId)
 			throws TicketException, CustomerException, LoginException {
-		// use parameter customerId to check if current session customer is same as
-		// customer from customerId
-		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login First !!!");
-		}
-		Customer customer = customerRepo.findById(customerId)
-				.orElseThrow(() -> new CustomerException("Customer not found.."));
-
-		List<Ticket> listOfTickets = customer.getTickets();
-
-		return listOfTickets;
+		Customer customer = customerRepository.findById(customerId)
+				.orElseThrow(() -> new CustomerException("Customer doesn't exist"));
+		return customer.getTickets();
 	}
 
 	@Override
-	public CustomerTicketDTO calculateBill(Long customerId, String uuid)
-			throws TicketException, LoginException, CustomerException {
-		if (islogInLogout.isLoggedIn(uuid) == false) {
-			throw new LoginException("Please Login First !!!!!!");
-		}
-		float charges = 0;
-		Customer customer = customerRepo.findById(customerId)
-				.orElseThrow(() -> new CustomerException("Customer not found.."));
-
-		List<Ticket> ticketList = customer.getTickets();
-
-		for (Ticket t : ticketList) {
-			charges += t.getActivities().getCharges();
-		}
-		CustomerTicketDTO customerTicketDTO = new CustomerTicketDTO();
-
-		customerTicketDTO.setCustomer(customer);
-		customerTicketDTO.setTickets(ticketList);
-		customerTicketDTO.setTotalAmount(charges);
-
-		return customerTicketDTO;
+	public CustomerActivityDTO calculateBill() throws TicketException, CustomerException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println(authentication);
+		Customer customer = customerRepository.findByEmail(authentication.getName()).get();
+		Set<Ticket> tickets = customer.getTickets();
+		
+		if(tickets.isEmpty()) 
+			throw new TicketException("Customer has not any booking history");
+		
+		List<Activity> bookedActivities = tickets.stream().map(ticket->ticket.getActivities())
+		.collect(Collectors.toList());
+		
+		
+		float charges = (float)bookedActivities.stream()
+        		.map(e->e.getCharges())
+        		.mapToDouble(Double::valueOf)
+        		.sum();
+		return new CustomerActivityDTO(
+					customer.getCustomerId(),
+					customer.getUserName(),
+					bookedActivities,
+					charges
+				);
 	}
 
 	@Override
+	public CustomerActivityDTO bookMultiParkComboWithFreeBuffet() throws TicketException, LoginException {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		Customer customer = customerRepository.findByEmail(authentication.getName())
+				.orElseThrow(() -> new LoginException("Please Login First."));
 
-	public CustomerActivityDTO bookMultiParkComboWithFreeBuffet(Long customerId, String uuid)
-			throws TicketException, LoginException {
-
-		Optional<Customer> optional = customerRepo.findById(customerId);
-
-		if (!islogInLogout.isLoggedIn(uuid))
-			throw new LoginException("You are not logged in please login first");
-
-		if (islogInLogout.isAdmin(uuid))
-			throw new AdminException("You should be an Customer to book this Pack");
-
-		if (optional.isEmpty())
-			throw new CustomerException("No Customer Found with id " + customerId);
-
-		CustomerActivityDTO customerActivityDTO = new CustomerActivityDTO();
-
-		Customer customer = optional.get();
-
-		customerActivityDTO.setCustomerName(customer.getUserName());
-		customerActivityDTO.setCustomerId(customer.getCustomerId());
-
-		for (int i = 1; i <= 4; i++) {
-
-			Ticket ticket = new Ticket();
-			ticket.setDateTime(LocalDateTime.now());
-			ticket.setCustomers(optional.get());
-
-			Activity activity = activityRepo.findById((long) i).get();
-
-			ticket.setActivities(activity);
-
-			customer.getTickets().add(ticket);
-
-			ticketRepo.save(ticket);
-
-			customerActivityDTO.getActivities().add(activity);
-			customerActivityDTO.setCharges(customerActivityDTO.getCharges() + activity.getCharges());
-		}
-		return customerActivityDTO;
+		List<Activity> bookedActivities = activityRepository.findAll().stream()
+				.limit(4).map(activity->{
+					Ticket ticket = new Ticket();
+					ticket.setCustomers(customer);
+					ticket.setActivities(activity);
+					customer.getTickets().add(ticket);
+				return	ticketRepository.save(ticket);
+				})
+				.map(ticket->ticket.getActivities())
+				.collect(Collectors.toList());
+		
+		float charges = (float)bookedActivities.stream()
+        		.map(e->e.getCharges())
+        		.mapToDouble(Double::valueOf)
+        		.sum();
+		
+		return new CustomerActivityDTO(
+				customer.getCustomerId(),
+				customer.getUserName(),
+				bookedActivities,
+				charges
+				);
 	}
 
 }

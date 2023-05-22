@@ -1,15 +1,14 @@
 package com.adventurelandVillage.service;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
 
 import com.adventurelandVillage.dto.CustomerActivityDTO;
 import com.adventurelandVillage.exception.ActivityException;
@@ -17,21 +16,19 @@ import com.adventurelandVillage.exception.AdminException;
 import com.adventurelandVillage.exception.LoginException;
 import com.adventurelandVillage.model.Activity;
 import com.adventurelandVillage.model.Admin;
-import com.adventurelandVillage.model.CurrentUserSession;
+import com.adventurelandVillage.model.Role;
 import com.adventurelandVillage.repository.ActivityRepository;
 import com.adventurelandVillage.repository.AdminRepo;
 import com.adventurelandVillage.repository.CustomerRepository;
-import com.adventurelandVillage.repository.SessionRepo;
 import com.adventurelandVillage.repository.TicketRepository;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 	@Autowired
-	private AdminRepo adminRepo;
+	private AdminRepo adminRepository;
 	@Autowired
 	private ActivityRepository activityRepo;
-	@Autowired
-	private SessionRepo sessionRepo;
+	
 
 	@Autowired
 	private TicketRepository ticketRepository;
@@ -39,34 +36,44 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private CustomerRepository customerRepository;
 
+	
 	@Autowired
-	private LoginService loginSerivce;
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Admin insertAdmin(Admin admin) throws AdminException {
-		Admin admin2 = adminRepo.findByUserName(admin.getUserName());
-		if (admin2 != null) {
-			throw new AdminException("admin already registered with this username");
-		}
-		return adminRepo.save(admin);
+		if (admin == null)
+			throw new AdminException("Please Enter Valid Details");
+		admin.setRole(Role.ROLE_ADMIN);
+		admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+		return adminRepository.save(admin);
 	}
 
 	@Override
-	public Admin updateAdmin(Admin admin) throws AdminException {
-		Admin admin2 = adminRepo.findById(admin.getAdminId()).orElseThrow(() -> new AdminException("not found"));
-		if (admin2 == null) {
-			throw new AdminException("Actvity not found");
+	public Admin updateAdmin(Admin updatedAdmin) throws AdminException {
+		
+		Authentication authentication = SecurityContextHolder
+				.getContext()
+				.getAuthentication();
+		
+		Admin admin = adminRepository.findByEmail(authentication.getName())
+				.orElseThrow(()-> new LoginException("User Not logged in"));
+		
+		if(updatedAdmin.getMobileNumber()!=null) {
+		    admin.setMobileNumber(updatedAdmin.getMobileNumber());
 		}
-		return adminRepo.save(admin2);
+		
+		if(updatedAdmin.getAddress()!=null) {
+			admin.setAddress(updatedAdmin.getAddress());
+		}
+		return adminRepository.save(admin);
 	}
 
 	@Override
-	public Admin deleteAdmin(Long adminId, String uuid) throws AdminException {
-		if (!loginSerivce.isAdmin(uuid)) {
-			throw new AdminException("You are not an admin");
-		}
-		Admin admin = adminRepo.findById(adminId).orElseThrow(() -> new AdminException("not found"));
-		adminRepo.delete(admin);
+	public Admin deleteAdmin(Long adminId) throws AdminException {
+		Admin admin = adminRepository.findById(adminId)
+				.orElseThrow(() -> new AdminException("not found"));
+		adminRepository.delete(admin);
 		return admin;
 	}
 
@@ -89,12 +96,10 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<CustomerActivityDTO> getActivitiesCustomerWise(String uuid) {
-		if (!loginSerivce.isAdmin(uuid))
-			throw new LoginException("Please Login As admin for the access");
+	public List<CustomerActivityDTO> getActivitiesCustomerWise() {	
 		List<CustomerActivityDTO> customerActivityDTO = customerRepository.findAll().stream()
 				.map((e) -> new CustomerActivityDTO(e.getCustomerId(), e.getUserName(),
-						ticketRepository.getActivityByCustomer(e.getCustomerId()), 0))
+						ticketRepository.getActivityByCustomer(e.getCustomerId()), (float) 0))
 				.collect(Collectors.toList()).stream().filter((e) -> !e.getActivities().isEmpty())
 				.collect(Collectors.toList());
 		return customerActivityDTO;
@@ -114,33 +119,10 @@ public class AdminServiceImpl implements AdminService {
 		return activities;
 	}
 
-	@Override
-	public Admin upAdmin(String uuid, Map<String, Object> fields) throws LoginException, AdminException {
 
-		CurrentUserSession currentUserSession = sessionRepo.findByUuid(uuid);
-		if (currentUserSession == null)
-			throw new LoginException("Please Login First");
-
-		Optional<Admin> optional = adminRepo.findById(currentUserSession.getUserId());
-		if (optional.isPresent()) {
-
-			Admin admin = optional.get();
-
-			fields.forEach((key, value) -> {
-
-				Field field = ReflectionUtils.findField(Admin.class, key);
-
-				field.setAccessible(true);
-
-				ReflectionUtils.setField(field, admin, value);
-			});
-			return adminRepo.save(admin);
-		}
-		throw new AdminException("No Admin Found");
-	}
 
 	public List<Admin> getAdmins() throws AdminException {
-		List<Admin> admins = adminRepo.findAll();
+		List<Admin> admins = adminRepository.findAll();
 		if (admins.isEmpty()) {
 			throw new AdminException("admin not there");
 		}
