@@ -2,18 +2,17 @@ package com.adventurelandVillage.exception;
 
 import java.time.LocalDateTime;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-	
+
 	@ExceptionHandler(AdminException.class)
 	public ResponseEntity<MyErrorDetails> adminException(AdminException adminException, WebRequest webRequest) {
 		MyErrorDetails details = new MyErrorDetails();
@@ -34,10 +33,9 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<MyErrorDetails>(details, HttpStatus.BAD_REQUEST);
 
 	}
-	
+
 	@ExceptionHandler(LoginException.class)
-	public ResponseEntity<MyErrorDetails> loginException(LoginException loginException,
-			WebRequest webRequest) {
+	public ResponseEntity<MyErrorDetails> loginException(LoginException loginException, WebRequest webRequest) {
 		MyErrorDetails details = new MyErrorDetails();
 		details.setTimestamp(LocalDateTime.now());
 		details.setMessage(loginException.getMessage());
@@ -66,15 +64,6 @@ public class GlobalExceptionHandler {
 
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<MyErrorDetails> myExceptionHandler(Exception e, WebRequest req) {
-
-		MyErrorDetails err = new MyErrorDetails(LocalDateTime.now(), e.getMessage(), req.getDescription(false));
-
-		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
-
-	}
-
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<MyErrorDetails> validationException(MethodArgumentNotValidException exception) {
 		MyErrorDetails errorDetails = new MyErrorDetails();
@@ -91,10 +80,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
 
 	}
-	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<MyErrorDetails> sqlExceptionHandler(DataIntegrityViolationException exception, WebRequest req) {
-		MyErrorDetails err = new MyErrorDetails(LocalDateTime.now(), exception.getMessage(), req.getDescription(false));
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<MyErrorDetails> myExceptionHandler(Exception e, WebRequest req) {
+		MyErrorDetails err = new MyErrorDetails(LocalDateTime.now(), e.getMessage(), req.getDescription(false));
 		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
-		
+
 	}
 }

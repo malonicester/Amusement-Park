@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adventurelandVillage.model.Customer;
 import com.adventurelandVillage.service.CustomerService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class CustomerController {
 
@@ -23,7 +25,7 @@ public class CustomerController {
 	private CustomerService customerService;
 
 	@PostMapping("/customers/register")
-	public ResponseEntity<Customer> registerCustomerHandler(@RequestBody Customer customer) {
+	public ResponseEntity<Customer> registerCustomerHandler(@Valid @RequestBody Customer customer) {
 		return new ResponseEntity<Customer>(customerService.insertCustomer(customer), HttpStatus.CREATED);
 	}
 
