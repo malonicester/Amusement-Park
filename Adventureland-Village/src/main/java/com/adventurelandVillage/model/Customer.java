@@ -1,6 +1,6 @@
 package com.adventurelandVillage.model;
 
-import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,14 +10,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString(exclude="tickets")
 @Entity
 public class Customer extends AbstractUser {
 	@Id
@@ -25,5 +29,5 @@ public class Customer extends AbstractUser {
 	private Long customerId;
 	@JsonIgnore
 	@OneToMany(mappedBy = "customers")
-	private List<Ticket> tickets;
+	private Set<Ticket> tickets;
 }

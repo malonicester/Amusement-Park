@@ -3,35 +3,38 @@ package com.adventurelandVillage.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adventurelandVillage.exception.LoginException;
-import com.adventurelandVillage.model.LoginDTO;
-import com.adventurelandVillage.service.LoginService;
+import com.adventurelandVillage.model.Admin;
+import com.adventurelandVillage.model.Customer;
+import com.adventurelandVillage.repository.AdminRepo;
+import com.adventurelandVillage.repository.CustomerRepository;
 
 @RestController
 public class LoginController {
+	
 	@Autowired
-	private LoginService loginService;
-
-	@PostMapping("/login")
-	public ResponseEntity<String> logInCustomer(@RequestBody LoginDTO dto) throws LoginException {
-
-		String result = loginService.logInAsUser(dto);
-
-		return new ResponseEntity<String>(result, HttpStatus.OK);
-
+	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private AdminRepo adminRepository;
+	
+	@GetMapping("/customers/signIn")
+	public ResponseEntity<Customer> customerLoginHandler(Authentication authentication){
+		Customer customer = customerRepository.findByEmail(authentication.getName())
+				.orElseThrow(()->new UsernameNotFoundException("Incorrect userName or password"));
+		return new ResponseEntity<Customer>(customer,HttpStatus.ACCEPTED);
 	}
-
-	@PostMapping("/logout")
-	public String logoutCustomer(@RequestParam(required = false) String key) throws LoginException {
-		return loginService.logOutFromAccount(key);
+	
+	@GetMapping("/admin/signIn")
+	public ResponseEntity<Admin> adminLoginHandler(Authentication authentication){
+		Admin admin = adminRepository.findByEmail(authentication.getName())
+				.orElseThrow(()-> new UsernameNotFoundException("Incorrect userName or password"));
+		
+		return new ResponseEntity<Admin>(admin,HttpStatus.ACCEPTED);
 	}
-	@PostMapping("/login/admin")
-	public ResponseEntity<String> loginAdminHandler(@RequestBody LoginDTO dto){
-		return new ResponseEntity<String>(loginService.logIntoAccount(dto),HttpStatus.OK);
-	}
+	
 }
