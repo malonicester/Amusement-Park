@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adventurelandVillage.model.Admin;
 import com.adventurelandVillage.service.AdminService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class AdminController {
 	
@@ -23,7 +25,7 @@ public class AdminController {
 	private AdminService adminService;
 
 	@PostMapping("/admin/register")
-	public ResponseEntity<Admin> registerAdminHandler(@RequestBody Admin admin) {
+	public ResponseEntity<Admin> registerAdminHandler(@Valid @RequestBody Admin admin) {
 		Admin admin2 = adminService.insertAdmin(admin);
 		return new ResponseEntity<Admin>(admin2, HttpStatus.CREATED);
 	}
