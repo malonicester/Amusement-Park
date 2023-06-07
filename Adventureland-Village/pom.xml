@@ -100,5 +100,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>AdventureLandVillageApplication</finalName>
 	</build>
 </project>
