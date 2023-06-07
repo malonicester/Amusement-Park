@@ -30,6 +30,7 @@ public class JwtValidatorFilter extends OncePerRequestFilter{
 		 SecretKey secretKey = Keys.hmacShaKeyFor(SecurityConstant.JWT_KEY.getBytes());
 	        String jwt= request.getHeader(SecurityConstant.JWT_HEADER);	        
 	        if(jwt != null) {
+ 
 	            try {
 	                jwt = jwt.substring(7);
 	                Claims claims= Jwts.parserBuilder()
